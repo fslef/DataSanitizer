@@ -12,7 +12,7 @@ AfterAll {
 Describe Get-Something {
     BeforeAll {
         Mock -CommandName Get-PrivateFunction -MockWith {
-            # This return the value passed to the Get-PrivateFunction parameter $PrivateData.
+            # This returns the value passed to the Get-PrivateFunction parameter $PrivateData.
             $PrivateData
         } -ModuleName $dscModuleName
     }
