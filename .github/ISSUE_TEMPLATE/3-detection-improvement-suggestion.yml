@@ -1,0 +1,30 @@
+name: "Detection Improvement or Suggestion"
+description: "Propose improvements or new suggestions for sensitive/personal data detection. Not for bug reports."
+labels: [enhancement, suggestion]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Please describe the context or scenario where you think detection can be improved or a new type of sensitive data should be detected.
+      placeholder: e.g., "I noticed that phone numbers in international format are not detected."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggestion or Improvement
+      description: Please describe your suggestion or the improvement you propose.
+      placeholder: e.g., "Add detection for international phone numbers using..."
+    validations:
+      required: true
+
+  - type: input
+    id: regex
+    attributes:
+      label: Recommended Regex (optional)
+      description: If you have a regex pattern to suggest, please provide it here.
+      placeholder: e.g., "/\\b\d{10,15}\\b/"
+    validations:
+      required: false
