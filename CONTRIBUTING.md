@@ -24,7 +24,7 @@ Pull requests are the best way to propose changes to the codebase (we use [Githu
 6. Issue that pull request!
 
 >[!important]
-> Changelog for this project is automaticaly updated
+> Changelog for this project is automatically updated
 > so please adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) for your commit
 
 ## Any contributions you make will be under the MIT Software License
