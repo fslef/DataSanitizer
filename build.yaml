@@ -123,12 +123,14 @@ BuildWorkflow:
     - publish_module_to_gallery
 
 ModuleBuildTasks:
+  Sampler:
+    - '*.build.Sampler.ib.tasks'
   Sampler.GitHubTasks:
     - '*.ib.tasks'
-  # DscResource.Test:
-  #   - 'Task.*'
-  # DscResource.DocGenerator:
-  #   - 'Task.*'
+  DscResource.Test:
+    - 'Task.*'
+  DscResource.DocGenerator:
+    - 'Task.*'
 
 # Invoke-Build Header to be used to 'decorate' the terminal output of the tasks.
 TaskHeader: |
