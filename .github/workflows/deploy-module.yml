@@ -13,7 +13,7 @@ on:
       - "v*"
     paths-ignore:
       - "CHANGELOG.md"
-  pr:
+  pull_request:
     branches: [ "main" ]
     paths-ignore:
       - "CHANGELOG.md"
