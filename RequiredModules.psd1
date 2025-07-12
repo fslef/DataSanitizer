@@ -21,8 +21,6 @@
     ChangelogManagement         = 'latest'
     'Sampler.GitHubTasks'       = 'latest'
     'DscResource.Test'          = 'latest'
-    'DscResource.AnalyzerRules' = 'latest'
-    xDscResourceDesigner        = 'latest'
     PlatyPS                     = 'latest'
     'DscResource.DocGenerator'  = 'latest'
 
