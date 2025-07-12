@@ -1,0 +1,261 @@
+# name: Install GitVersion
+#   uses: gittools/actions/gitversion/setup@v3.2.1
+# name: Evaluate Next Version
+#   uses: gittools/actions/gitversion/execute@v3.2.1
+
+name: CI/CD Pipeline
+
+# Déclencheurs équivalents au trigger Azure (branche main, tags v*, ignore préversions et CHANGELOG.md)
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - "v*"
+    paths-ignore:
+      - "CHANGELOG.md"
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - "CHANGELOG.md"
+  workflow_dispatch:
+env:
+  buildFolderName: "output"
+  buildArtifactName: "output"
+  testResultFolderName: "testResults"
+  defaultBranch: "main"
+
+jobs:
+  build:
+    name: Build and Package Module
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Équivalent de Agent.Source.Git.ShallowFetchDepth = 0
+
+      - name: Setup GitVersion (v5.x)
+        uses: gittools/actions/gitversion/setup@v3.2.1
+        with:
+          versionSpec: '5.x'  # Installe GitVersion.Tool version 5.X
+
+      - name: Determine version (GitVersion)
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.2.1
+        with:
+          useConfigFile: false
+
+      - name: Build & Package Module
+        run: .\build.ps1 -ResolveDependency -Tasks pack
+        shell: pwsh  # Exécute le script PowerShell avec PowerShell Core
+        env:
+          ModuleVersion: ${{ steps.gitversion.outputs.NuGetVersionV2 }}  # Version du module issue de GitVersion
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}/
+
+  test_linux:
+    name: Test on Linux (PowerShell 7)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Run Tests (Linux)
+        run: ./build.ps1 -Tasks test
+        shell: pwsh  # PowerShell Core sous Linux
+
+      - name: Upload Test Results (Linux)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: CodeCoverageLinux
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_windows_core:
+    name: Test on Windows (PowerShell 7)
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Run Tests (Windows PowerShell Core)
+        run: .\build.ps1 -Tasks test
+        shell: pwsh  # PowerShell Core 7 sur Windows
+
+      - name: Upload Test Results (Win PS7)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: CodeCoverageWinPS7
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_windows_ps:
+    name: Test on Windows (Windows PowerShell 5.1)
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Run Tests (Windows PowerShell 5.1)
+        run: .\build.ps1 -Tasks test
+        shell: powershell  # Windows PowerShell (Desktop)
+
+      - name: Upload Test Results (Win PS5.1)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: CodeCoverageWinPS51
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_macos:
+    name: Test on macOS (PowerShell 7)
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Run Tests (macOS PowerShell Core)
+        run: ./build.ps1 -Tasks test
+        shell: pwsh  # PowerShell Core sur macOS
+
+      - name: Upload Test Results (macOS)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: CodeCoverageMacOS
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_integration:
+    name: Integration Tests Matrix
+    needs: build
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            shell: pwsh
+            name: Windows_PowerShell7
+          - os: windows-latest
+            shell: powershell
+            name: Windows_PowerShell5
+          - os: ubuntu-latest
+            shell: pwsh
+            name: Linux_PowerShell7
+          - os: macos-latest
+            shell: pwsh
+            name: macOS_PowerShell7
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Run Integration Tests (${{ matrix.name }})
+        run: ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
+        shell: ${{ matrix.shell }}
+
+      - name: Upload Integration Test Results (${{ matrix.name }})
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: IntegrationResults-${{ matrix.name }}
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  code_coverage:
+    name: Merge & Publish Code Coverage
+    needs: [test_linux, test_windows_core, test_windows_ps, test_macos]  # dépend des jobs unit tests
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Download Test Artifact (Linux)
+        uses: actions/download-artifact@v3
+        with:
+          name: CodeCoverageLinux
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+
+      - name: Download Test Artifact (macOS)
+        uses: actions/download-artifact@v3
+        with:
+          name: CodeCoverageMacOS
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+
+      - name: Download Test Artifact (Windows PS5.1)
+        uses: actions/download-artifact@v3
+        with:
+          name: CodeCoverageWinPS51
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+
+      - name: Download Test Artifact (Windows PS7)
+        uses: actions/download-artifact@v3
+        with:
+          name: CodeCoverageWinPS7
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+
+      - name: Merge coverage files
+        run: ./build.ps1 -Tasks merge
+        shell: pwsh
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/JaCoCo_coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  deploy:
+    name: Deploy Module
+    needs: [test_linux, test_windows_core, test_windows_ps, test_macos, test_integration, code_coverage]
+    runs-on: ubuntu-latest
+    if: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && github.repository_owner == 'synedgy' && success() }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Publish Release
+        run: ./build.ps1 -Tasks publish
+        shell: pwsh
+        env:
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          GalleryApiToken: ${{ secrets.GALLERY_API_TOKEN }}
+          ReleaseBranch: ${{ env.defaultBranch }}
+          MainGitBranch: ${{ env.defaultBranch }}
+
+      - name: Create Changelog PR
+        run: ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
+        shell: pwsh
+        env:
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          ReleaseBranch: ${{ env.defaultBranch }}
+          MainGitBranch: ${{ env.defaultBranch }}

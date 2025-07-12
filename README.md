@@ -1,5 +1,7 @@
 # DataSanitizer
 
+[![codecov](https://codecov.io/gh/fslef/DataSanitizer/graph/badge.svg?token=GeMGD62rz5)](https://codecov.io/gh/fslef/DataSanitizer)
+
 **DataSanitizer** is a PowerShell module for automated processing of personal and sensitive data in structured and unstructured sources. It is designed for use in secure data workflows to support privacy compliance and operational security requirements.
 
 This tool is intended for security analysts, compliance teams, and DevSecOps pipelines requiring reliable data handling in alignment with data protection regulations such as GDPR, HIPAA, and ISO/IEC 27001.
