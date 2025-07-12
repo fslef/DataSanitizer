@@ -32,11 +32,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v4.0.1
+        uses: gittools/actions/gitversion/setup@v3.2.1
         with:
           versionSpec: 5.x
       - name: Evaluate Next Version
-        uses: gittools/actions/gitversion/execute@v4.0.1
+        uses: gittools/actions/gitversion/execute@v3.2.1
         with:
           configFilePath: GitVersion.yml
       - name: Build & Package Module
