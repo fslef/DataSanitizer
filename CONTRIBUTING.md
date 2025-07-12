@@ -12,7 +12,7 @@ We use GitHub to host code, to track issues and feature requests, as well as acc
 
 ## We Use [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), So All Code Changes Happen Through Pull Requests
 
-![Branching Strategy](docs/media/github-flow.png.png)
+![Branching Strategy](docs/media/github-flow.png)
 
 
 Pull requests are the best way to propose changes to the codebase (we use [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow)). We actively welcome your pull requests:
