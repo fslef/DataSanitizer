@@ -28,15 +28,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@441c43ddefe9c8f5b8e8cee0257bcf06d518d2d3 # v3.2.0
+        uses: gittools/actions/gitversion/setup@v4.0.1
         with:
           versionSpec: 5.x
       - name: Evaluate Next Version
-        uses: gittools/actions/gitversion/execute@441c43ddefe9c8f5b8e8cee0257bcf06d518d2d3 # v3.2.0
+        uses: gittools/actions/gitversion/execute@v4.0.1
         with:
           configFilePath: GitVersion.yml
       - name: Build & Package Module
