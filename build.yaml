@@ -75,6 +75,35 @@ CodeCoverage:
   CodeCoverageFilePattern: Codecov*.xml
 
 ####################################################
+#             HQRM Test Configuration              #
+####################################################
+
+DscTest:
+  Pester:
+    Configuration:
+      Filter:
+        ExcludeTag:
+          - "Common Tests - New Error-Level Script Analyzer Rules"
+          - "Common Tests - Validate Localization"
+          - "Common Tests - Validate Example Files To Be Published"
+          - "Common Tests - Validate Example Files"
+      Output:
+        Verbosity: Detailed
+        CIFormat: Auto
+      TestResult:
+        OutputFormat: NUnitXML
+        OutputEncoding: ascii
+        OutputPath: ./output/testResults/NUnitXml_HQRM_Tests.xml
+  Script:
+    ExcludeSourceFile:
+      - output
+      - Modules/DscResource.Common
+    ExcludeModuleFile:
+      - Templates
+      - Modules/DscResource.Common
+    MainGitBranch: main
+
+####################################################
 #       Sampler Pipeline Configuration             #
 ####################################################
 # Defining 'Workflows' (suite of InvokeBuild tasks) to be run using their alias
