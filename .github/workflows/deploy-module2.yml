@@ -85,7 +85,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Unit Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -Tasks test
+        run: pwsh ${{ env.buildFolderName }}/build.ps1 -Tasks test
         env:
           # ProjectName: ${{ env.ProjectName }}
           path: ${{ env.buildFolderName }}
