@@ -57,6 +57,7 @@ jobs:
             ./RequiredModules/
             ./tests/
             ./output/
+            ./output/module/
 
   test:
     name: Unit Tests Matrix
