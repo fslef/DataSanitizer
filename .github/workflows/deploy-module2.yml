@@ -14,8 +14,8 @@ on:
   workflow_dispatch:
 
 env:
+  buildArtifactName: "Source Code"
   buildFolderName: "output"
-  buildArtifactName: "output"
   testResultFolderName: "testResults"
   defaultBranch: "main"
 
