@@ -18,6 +18,7 @@ env:
   buildArtifactName: "output"
   testResultFolderName: "testResults"
   defaultBranch: "main"
+  ProjectName: "DataSanitizer"
 
 jobs:
   build:
@@ -43,6 +44,7 @@ jobs:
       - name: Build & Package Module
         run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks pack
         env:
+          ProjectName: ${{ env.ProjectName }}
           ModuleVersion: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
 
       - name: Upload Build Artifact
@@ -76,17 +78,16 @@ jobs:
             artifact: CodeCoverageMacOS
     runs-on: ${{ matrix.os }}
     steps:
-
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
           path: .
 
-
       - name: Run Unit Tests (${{ matrix.name }})
         run: pwsh ./build.ps1 -Tasks test
-
+        env:
+          ProjectName: ${{ env.ProjectName }}
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -133,6 +134,8 @@ jobs:
 
       - name: Merge coverage files
         run: pwsh ./build.ps1 -Tasks merge
+        env:
+          ProjectName: ${{ env.ProjectName }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -146,7 +149,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ (github.event_name != 'pull_request') && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && success() }}
     steps:
-
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -156,6 +158,7 @@ jobs:
       - name: Publish Release
         run: pwsh ./build.ps1 -Tasks publish
         env:
+          ProjectName: ${{ env.ProjectName }}
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           GalleryApiToken: ${{ secrets.GALLERY_API_TOKEN }}
           ReleaseBranch: ${{ env.defaultBranch }}
@@ -164,6 +167,7 @@ jobs:
       - name: Create Changelog PR
         run: pwsh ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
         env:
+          ProjectName: ${{ env.ProjectName }}
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           ReleaseBranch: ${{ env.defaultBranch }}
           MainGitBranch: ${{ env.defaultBranch }}
