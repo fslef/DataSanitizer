@@ -140,6 +140,7 @@ BuildWorkflow:
 
   # Defining test task to be run when invoking `./build.ps1 -Tasks test`
   test:
+    - Set_PSModulePath
     - Pester_Tests_Stop_On_Fail
     - Convert_Pester_Coverage
     - Pester_if_Code_Coverage_Under_Threshold
