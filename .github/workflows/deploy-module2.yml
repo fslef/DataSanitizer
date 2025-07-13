@@ -85,7 +85,7 @@ jobs:
 
 
       - name: Run Unit Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -Tasks test
+        run: pwsh ${{ env.buildFolderName }}/build.ps1 -Tasks test
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -131,7 +131,7 @@ jobs:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
 
       - name: Merge coverage files
-        run: pwsh ./build.ps1 -Tasks merge
+        run: pwsh ${{ env.buildFolderName }}/build.ps1 -Tasks merge
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -153,7 +153,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Publish Release
-        run: pwsh ./build.ps1 -Tasks publish
+        run: pwsh ${{ env.buildFolderName }}/build.ps1 -Tasks publish
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           GalleryApiToken: ${{ secrets.GALLERY_API_TOKEN }}
@@ -161,7 +161,7 @@ jobs:
           MainGitBranch: ${{ env.defaultBranch }}
 
       - name: Create Changelog PR
-        run: pwsh ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
+        run: pwsh ${{ env.buildFolderName }}/build.ps1 -Tasks Create_ChangeLog_GitHub_PR
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           ReleaseBranch: ${{ env.defaultBranch }}
