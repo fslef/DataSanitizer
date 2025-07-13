@@ -1,23 +1,18 @@
-# name: Install GitVersion
-#   uses: gittools/actions/gitversion/setup@v3.2.1
-# name: Evaluate Next Version
-#   uses: gittools/actions/gitversion/execute@v3.2.1
-
 name: CI/CD Pipeline
 
-# Déclencheurs équivalents au trigger Azure (branche main, tags v*, ignore préversions et CHANGELOG.md)
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     tags:
       - "v*"
     paths-ignore:
       - "CHANGELOG.md"
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
       - "CHANGELOG.md"
   workflow_dispatch:
+
 env:
   buildFolderName: "output"
   buildArtifactName: "output"
@@ -32,12 +27,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Équivalent de Agent.Source.Git.ShallowFetchDepth = 0
+          fetch-depth: 0
 
       - name: Setup GitVersion (v5.x)
         uses: gittools/actions/gitversion/setup@v3.2.1
         with:
-          versionSpec: '5.x'  # Installe GitVersion.Tool version 5.X
+          versionSpec: '5.x'
 
       - name: Determine version (GitVersion)
         id: gitversion
@@ -46,10 +41,9 @@ jobs:
           useConfigFile: false
 
       - name: Build & Package Module
-        run: .\build.ps1 -ResolveDependency -Tasks pack
-        shell: pwsh  # Exécute le script PowerShell avec PowerShell Core
+        run: pwsh ./build.ps1 -ResolveDependency -Tasks pack
         env:
-          ModuleVersion: ${{ steps.gitversion.outputs.NuGetVersionV2 }}  # Version du module issue de GitVersion
+          ModuleVersion: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
@@ -69,8 +63,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Tests (Linux)
-        run: ./build.ps1 -Tasks test
-        shell: pwsh  # PowerShell Core sous Linux
+        run: pwsh ./build.ps1 -Tasks test
 
       - name: Upload Test Results (Linux)
         if: ${{ always() }}
@@ -91,8 +84,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Tests (Windows PowerShell Core)
-        run: .\build.ps1 -Tasks test
-        shell: pwsh  # PowerShell Core 7 sur Windows
+        run: pwsh ./build.ps1 -Tasks test
 
       - name: Upload Test Results (Win PS7)
         if: ${{ always() }}
@@ -113,8 +105,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Tests (Windows PowerShell 5.1)
-        run: .\build.ps1 -Tasks test
-        shell: powershell  # Windows PowerShell (Desktop)
+        run: powershell ./build.ps1 -Tasks test
 
       - name: Upload Test Results (Win PS5.1)
         if: ${{ always() }}
@@ -135,8 +126,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Tests (macOS PowerShell Core)
-        run: ./build.ps1 -Tasks test
-        shell: pwsh  # PowerShell Core sur macOS
+        run: pwsh ./build.ps1 -Tasks test
 
       - name: Upload Test Results (macOS)
         if: ${{ always() }}
@@ -172,8 +162,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Integration Tests (${{ matrix.name }})
-        run: ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
-        shell: ${{ matrix.shell }}
+        run: pwsh ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
 
       - name: Upload Integration Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -184,7 +173,7 @@ jobs:
 
   code_coverage:
     name: Merge & Publish Code Coverage
-    needs: [test_linux, test_windows_core, test_windows_ps, test_macos]  # dépend des jobs unit tests
+    needs: [test_linux, test_windows_core, test_windows_ps, test_macos]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
@@ -219,8 +208,7 @@ jobs:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
 
       - name: Merge coverage files
-        run: ./build.ps1 -Tasks merge
-        shell: pwsh
+        run: pwsh ./build.ps1 -Tasks merge
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -244,8 +232,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Publish Release
-        run: ./build.ps1 -Tasks publish
-        shell: pwsh
+        run: pwsh ./build.ps1 -Tasks publish
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           GalleryApiToken: ${{ secrets.GALLERY_API_TOKEN }}
@@ -253,8 +240,7 @@ jobs:
           MainGitBranch: ${{ env.defaultBranch }}
 
       - name: Create Changelog PR
-        run: ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
-        shell: pwsh
+        run: pwsh ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           ReleaseBranch: ${{ env.defaultBranch }}
