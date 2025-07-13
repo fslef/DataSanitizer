@@ -85,9 +85,8 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Make build.ps1 executable (Linux/macOS)
-      if: runner.os != 'Windows'
-      run: chmod +x ./build.ps1
-
+        if: runner.os != 'Windows'
+        run: chmod +x ./build.ps1
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -125,10 +124,9 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}
 
-      $1  - name: Make build.ps1 executable (Linux/macOS)
-    if: runner.os != 'Windows'
-    run: chmod +x ./build.ps1
-$2
+      - name: Make build.ps1 executable (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: chmod +x ./build.ps1
 
       - name: Upload Integration Test Results (${{ matrix.name }})
         if: ${{ always() }}
