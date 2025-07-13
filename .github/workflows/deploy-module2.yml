@@ -54,7 +54,8 @@ jobs:
           path: |
             ./build.ps1
             ./build.yaml
-            ./RequiredModules/
+            ./output/RequiredModules/
+            ./source/
             ./tests/
             ./output/
 
