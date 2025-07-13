@@ -85,7 +85,7 @@ jobs:
         run: chmod +x ./build.ps1
 
       - name: Run Unit Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -Tasks test
+        run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks test
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -131,7 +131,7 @@ jobs:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
 
       - name: Merge coverage files
-        run: pwsh ./build.ps1 -Tasks merge
+        run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks merge
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
