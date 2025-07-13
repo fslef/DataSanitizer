@@ -24,6 +24,6 @@
     'DscResource.Test'          = 'latest'
     PlatyPS                     = 'latest'
     'DscResource.DocGenerator'  = 'latest'
-    'DscResource.Tests'         = 'latest'
+    'DscResource.Test'         = 'latest'
 
 }
