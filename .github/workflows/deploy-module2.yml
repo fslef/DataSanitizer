@@ -51,7 +51,7 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
 
-  test:
+  unit_test:
     name: Unit Tests Matrix
     needs: build
     strategy:
@@ -85,7 +85,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -Tasks test
+        run: ./build.ps1 -Tasks test
         shell: ${{ matrix.shell }}
 
       - name: Upload Test Results (${{ matrix.name }})
