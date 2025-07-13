@@ -87,8 +87,8 @@ jobs:
 
       - name: Run Unit Tests (${{ matrix.name }})
         run: pwsh ./build.ps1 -Tasks test
-        env:
-          ProjectName: ${{ env.ProjectName }}
+        # env:
+        #   ProjectName: ${{ env.ProjectName }}
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
