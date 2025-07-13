@@ -52,12 +52,13 @@ jobs:
         with:
           name: ${{ env.buildArtifactName }}
           path: |
+            ./output/
+            ./output/RequiredModules/
             ./build.ps1
             ./build.yaml
-            ./output/RequiredModules/
+            ./CHANGELOG.md
             ./source/
             ./tests/
-            ./output/
 
   test:
     name: Unit Tests Matrix
