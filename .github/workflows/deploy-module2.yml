@@ -86,7 +86,7 @@ jobs:
 
       - name: Run Tests (${{ matrix.name }})
         run: ./build.ps1 -Tasks test
-        shell: ${{ matrix.shell }}
+
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -125,8 +125,7 @@ jobs:
           path: ${{ env.buildFolderName }}
 
       - name: Run Integration Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
-        shell: ${{ matrix.shell }}
+        run: ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
 
       - name: Upload Integration Test Results (${{ matrix.name }})
         if: ${{ always() }}
