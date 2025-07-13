@@ -106,31 +106,31 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
-          path: ${{ env.buildFolderName }}
+          # path: ${{ env.buildFolderName }}
 
       - name: Download Test Artifact (Linux)
         uses: actions/download-artifact@v4
         with:
           name: CodeCoverageLinux
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+          path: ./${{ env.testResultFolderName }}
 
       - name: Download Test Artifact (macOS)
         uses: actions/download-artifact@v4
         with:
           name: CodeCoverageMacOS
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+          path: ./${{ env.testResultFolderName }}
 
       - name: Download Test Artifact (Windows PS5.1)
         uses: actions/download-artifact@v4
         with:
           name: CodeCoverageWinPS51
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+          path: ./${{ env.testResultFolderName }}
 
       - name: Download Test Artifact (Windows PS7)
         uses: actions/download-artifact@v4
         with:
           name: CodeCoverageWinPS7
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
+          path: ./${{ env.testResultFolderName }}
 
       - name: Merge coverage files
         run: pwsh ./build.ps1 -Tasks merge
