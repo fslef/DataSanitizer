@@ -5,7 +5,6 @@
 
 BuiltModuleSubdirectory: module
 VersionedOutputDirectory: true
-ProjectName: dataSanitizer
 CopyPaths:
   - en-US
 #  - DSCResources
