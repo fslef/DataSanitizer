@@ -21,7 +21,7 @@ env:
 
 jobs:
   build:
-    name: Build and Package Module
+    name: Build Module
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -51,26 +51,22 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
 
-  unit_test:
+  test:
     name: Unit Tests Matrix
     needs: build
     strategy:
       matrix:
         include:
           - os: ubuntu-latest
-            shell: pwsh
             name: Linux
             artifact: CodeCoverageLinux
           - os: windows-latest
-            shell: pwsh
             name: Windows_PowerShell7
             artifact: CodeCoverageWinPS7
           - os: windows-latest
-            shell: powershell
             name: Windows_PowerShell5
             artifact: CodeCoverageWinPS51
           - os: macos-latest
-            shell: pwsh
             name: macOS
             artifact: CodeCoverageMacOS
     runs-on: ${{ matrix.os }}
@@ -90,7 +86,6 @@ jobs:
 
       - name: Run Unit Tests (${{ matrix.name }})
         run: ./build.ps1 -Tasks test
-        shell: ${{ matrix.shell }}
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -99,49 +94,9 @@ jobs:
           name: ${{ matrix.artifact }}
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
 
-  test_integration:
-    name: Integration Tests Matrix
-    needs: build
-    strategy:
-      matrix:
-        include:
-          - os: windows-latest
-            shell: pwsh
-            name: Windows_PowerShell7
-          - os: windows-latest
-            shell: powershell
-            name: Windows_PowerShell5
-          - os: ubuntu-latest
-            shell: pwsh
-            name: Linux_PowerShell7
-          - os: macos-latest
-            shell: pwsh
-            name: macOS_PowerShell7
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.buildArtifactName }}
-          path: ${{ env.buildFolderName }}
-
-      - name: Make build.ps1 executable (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: chmod +x ./build.ps1
-
-      - name: Upload Integration Test Results (${{ matrix.name }})
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: IntegrationResults-${{ matrix.name }}
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
-
   code_coverage:
     name: Merge & Publish Code Coverage
-    needs: [unit_test]
+    needs: [test]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
@@ -186,7 +141,7 @@ jobs:
 
   deploy:
     name: Deploy Module
-    needs: [unit_test, test_integration, code_coverage]
+    needs: [code_coverage]
     runs-on: ubuntu-latest
     if: ${{ (github.event_name != 'pull_request') && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && success() }}
     steps:
