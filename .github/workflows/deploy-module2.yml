@@ -86,9 +86,6 @@ jobs:
 
       - name: Run Unit Tests (${{ matrix.name }})
         run: pwsh ${{ env.buildFolderName }}/build.ps1 -Tasks test
-        with:
-          name: ${{ env.buildArtifactName }}
-          path: .
 
 
       - name: Upload Test Results (${{ matrix.name }})
