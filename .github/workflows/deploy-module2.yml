@@ -94,7 +94,7 @@ jobs:
         run: pwsh ./build.ps1 -Tasks test
         env:
           # ProjectName: ${{ env.ProjectName }}
-          Path: ${{ env.buildFolderName }}
+          path: ${{ env.buildFolderName }}
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
