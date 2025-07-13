@@ -56,6 +56,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -77,6 +80,9 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -98,6 +104,9 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -119,6 +128,9 @@ jobs:
     needs: build
     runs-on: macos-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -155,6 +167,9 @@ jobs:
             name: macOS_PowerShell7
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -220,7 +235,7 @@ jobs:
     name: Deploy Module
     needs: [test_linux, test_windows_core, test_windows_ps, test_macos, test_integration, code_coverage]
     runs-on: ubuntu-latest
-    if: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && github.repository_owner == 'synedgy' && success() }}
+    if: ${{ (github.event_name != 'pull_request') && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && success() }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
