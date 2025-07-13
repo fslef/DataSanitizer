@@ -51,10 +51,29 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
 
-  test_linux:
-    name: Test on Linux (PowerShell 7)
+  test:
+    name: Unit Tests Matrix
     needs: build
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            shell: pwsh
+            name: Linux
+            artifact: CodeCoverageLinux
+          - os: windows-latest
+            shell: pwsh
+            name: Windows_PowerShell7
+            artifact: CodeCoverageWinPS7
+          - os: windows-latest
+            shell: powershell
+            name: Windows_PowerShell5
+            artifact: CodeCoverageWinPS51
+          - os: macos-latest
+            shell: pwsh
+            name: macOS
+            artifact: CodeCoverageMacOS
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -65,86 +84,15 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}
 
-      - name: Run Tests (Linux)
+      - name: Run Tests (${{ matrix.name }})
         run: pwsh ./build.ps1 -Tasks test
+        shell: ${{ matrix.shell }}
 
-      - name: Upload Test Results (Linux)
+      - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: CodeCoverageLinux
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
-
-  test_windows_core:
-    name: Test on Windows (PowerShell 7)
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.buildArtifactName }}
-          path: ${{ env.buildFolderName }}
-
-      - name: Run Tests (Windows PowerShell Core)
-        run: pwsh ./build.ps1 -Tasks test
-
-      - name: Upload Test Results (Win PS7)
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: CodeCoverageWinPS7
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
-
-  test_windows_ps:
-    name: Test on Windows (Windows PowerShell 5.1)
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.buildArtifactName }}
-          path: ${{ env.buildFolderName }}
-
-      - name: Run Tests (Windows PowerShell 5.1)
-        run: powershell ./build.ps1 -Tasks test
-
-      - name: Upload Test Results (Win PS5.1)
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: CodeCoverageWinPS51
-          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
-
-  test_macos:
-    name: Test on macOS (PowerShell 7)
-    needs: build
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.buildArtifactName }}
-          path: ${{ env.buildFolderName }}
-
-      - name: Run Tests (macOS PowerShell Core)
-        run: pwsh ./build.ps1 -Tasks test
-
-      - name: Upload Test Results (macOS)
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: CodeCoverageMacOS
+          name: ${{ matrix.artifact }}
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
 
   test_integration:
@@ -178,6 +126,7 @@ jobs:
 
       - name: Run Integration Tests (${{ matrix.name }})
         run: pwsh ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
+        shell: ${{ matrix.shell }}
 
       - name: Upload Integration Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -188,7 +137,7 @@ jobs:
 
   code_coverage:
     name: Merge & Publish Code Coverage
-    needs: [test_linux, test_windows_core, test_windows_ps, test_macos]
+    needs: [test]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
@@ -233,7 +182,7 @@ jobs:
 
   deploy:
     name: Deploy Module
-    needs: [test_linux, test_windows_core, test_windows_ps, test_macos, test_integration, code_coverage]
+    needs: [test, test_integration, code_coverage]
     runs-on: ubuntu-latest
     if: ${{ (github.event_name != 'pull_request') && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && success() }}
     steps:
