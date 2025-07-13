@@ -13,6 +13,7 @@
     # }
 
     InvokeBuild                 = 'latest'
+    Sampler                     = 'latest'
     PSScriptAnalyzer            = 'latest'
     Pester                      = 'latest'
     Plaster                     = 'latest'
