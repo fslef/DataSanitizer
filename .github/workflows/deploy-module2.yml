@@ -88,6 +88,10 @@ jobs:
         if: runner.os != 'Windows'
         run: chmod +x ./build.ps1
 
+      - name: Run Unit Tests (${{ matrix.name }})
+        run: ./build.ps1 -Tasks test
+        shell: ${{ matrix.shell }}
+
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
