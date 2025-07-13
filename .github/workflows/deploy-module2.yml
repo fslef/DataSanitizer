@@ -25,7 +25,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -71,8 +71,6 @@ jobs:
             artifact: CodeCoverageMacOS
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
@@ -80,12 +78,9 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}
 
-      - name: Make build.ps1 executable (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: chmod +x ./build.ps1
 
       - name: Run Unit Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks test
+        run: pwsh ./build.ps1 -Tasks test
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -131,7 +126,7 @@ jobs:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
 
       - name: Merge coverage files
-        run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks merge
+        run: pwsh ./build.ps1 -Tasks merge
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -145,8 +140,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ (github.event_name != 'pull_request') && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && success() }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
