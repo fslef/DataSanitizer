@@ -84,8 +84,10 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}
 
-      - name: Run Tests (${{ matrix.name }})
-        run: ./build.ps1 -Tasks test
+      $1  - name: Make build.ps1 executable (Linux/macOS)
+    if: runner.os != 'Windows'
+    run: chmod +x ./build.ps1
+$2
 
 
       - name: Upload Test Results (${{ matrix.name }})
@@ -124,8 +126,10 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}
 
-      - name: Run Integration Tests (${{ matrix.name }})
-        run: ./build.ps1 -Tasks test -CodeCoverageThreshold 0 -PesterPath 'tests/Integration'
+      $1  - name: Make build.ps1 executable (Linux/macOS)
+    if: runner.os != 'Windows'
+    run: chmod +x ./build.ps1
+$2
 
       - name: Upload Integration Test Results (${{ matrix.name }})
         if: ${{ always() }}
