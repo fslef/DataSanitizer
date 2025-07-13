@@ -82,7 +82,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
-          path: .
+          path: ${{ env.buildFolderName }}
 
       - name: Run Unit Tests (${{ matrix.name }})
         run: pwsh ./build.ps1 -Tasks test
