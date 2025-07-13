@@ -135,7 +135,7 @@ jobs:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}
 
       - name: Merge coverage files
-        run: pwsh ./build.ps1 -Tasks merge
+        run: ./build.ps1 -Tasks merge
         # env:
         #   ProjectName: ${{ env.ProjectName }}
 
