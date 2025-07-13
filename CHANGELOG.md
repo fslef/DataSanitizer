@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `.github/ISSUE_TEMPLATE/3-detection-improvement-suggestion.yaml` for detection-related suggestions
   - Added `.github/ISSUE_TEMPLATE/config.yml` to disable blank issues and redirect users to a support contact page
 - **CI/CD**
-  - Added PowerShell workflow for automated script analysis and SARIF upload
+  - Added PowerShell workflow for automated script analysis and SARIF upload.
 
 ### Changed
 
