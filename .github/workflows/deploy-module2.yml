@@ -59,6 +59,11 @@ jobs:
             ./output/
             ./output/module/
 
+      - name: List output content
+        run: |
+          echo "Contenu de output :"
+          ls -R ./output || echo "output introuvable"
+
   test:
     name: Unit Tests Matrix
     needs: build
