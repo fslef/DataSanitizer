@@ -85,7 +85,7 @@ jobs:
         run: chmod +x ./build.ps1
 
       - name: Run Unit Tests (${{ matrix.name }})
-        run: ./build.ps1 -Tasks test
+        run: pwsh ./build.ps1 -Tasks test
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
