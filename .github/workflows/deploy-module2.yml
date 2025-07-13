@@ -56,48 +56,94 @@ jobs:
             ./tests/
             ./output/
 
-  test:
-    name: Unit Tests Matrix
+  test_linux:
+    name: Unit Tests - Linux
     needs: build
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            name: Linux
-            artifact: CodeCoverageLinux
-          - os: windows-latest
-            name: Windows_PowerShell7
-            artifact: CodeCoverageWinPS7
-          - os: windows-latest
-            name: Windows_PowerShell5
-            artifact: CodeCoverageWinPS51
-          - os: macos-latest
-            name: macOS
-            artifact: CodeCoverageMacOS
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
           path: .
 
-
-      - name: Run Unit Tests (${{ matrix.name }})
+      - name: Run Unit Tests (Linux)
         run: pwsh ./build.ps1 -Tasks test
 
-
-      - name: Upload Test Results (${{ matrix.name }})
+      - name: Upload Test Results (Linux)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact }}
+          name: CodeCoverageLinux
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_macos:
+    name: Unit Tests - macOS
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: .
+
+      - name: Run Unit Tests (macOS)
+        run: pwsh ./build.ps1 -Tasks test
+
+      - name: Upload Test Results (macOS)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodeCoverageMacOS
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_windows_ps51:
+    name: Unit Tests - Windows PowerShell 5.1
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: .
+
+      - name: Run Unit Tests (Windows PS 5.1)
+        run: pwsh ./build.ps1 -Tasks test
+        shell: powershell
+
+      - name: Upload Test Results (Windows PS 5.1)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodeCoverageWinPS51
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  test_windows_ps7:
+    name: Unit Tests - Windows PowerShell 7
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: .
+
+      - name: Run Unit Tests (Windows PS 7)
+        run: pwsh ./build.ps1 -Tasks test
+
+      - name: Upload Test Results (Windows PS 7)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodeCoverageWinPS7
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
 
   code_coverage:
     name: Merge & Publish Code Coverage
-    needs: [test]
+    needs: [test_linux, test_macos, test_windows_ps51, test_windows_ps7]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
