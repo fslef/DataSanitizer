@@ -18,7 +18,7 @@ env:
   buildArtifactName: "output"
   testResultFolderName: "testResults"
   defaultBranch: "main"
-  ProjectName: "DataSanitizer"
+  # ProjectName: "DataSanitizer"
 
 jobs:
   build:
@@ -135,8 +135,8 @@ jobs:
 
       - name: Merge coverage files
         run: pwsh ./build.ps1 -Tasks merge
-        env:
-          ProjectName: ${{ env.ProjectName }}
+        # env:
+        #   ProjectName: ${{ env.ProjectName }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -159,7 +159,7 @@ jobs:
       - name: Publish Release
         run: pwsh ./build.ps1 -Tasks publish
         env:
-          ProjectName: ${{ env.ProjectName }}
+          # ProjectName: ${{ env.ProjectName }}
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           GalleryApiToken: ${{ secrets.GALLERY_API_TOKEN }}
           ReleaseBranch: ${{ env.defaultBranch }}
@@ -168,7 +168,7 @@ jobs:
       - name: Create Changelog PR
         run: pwsh ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
         env:
-          ProjectName: ${{ env.ProjectName }}
+          # ProjectName: ${{ env.ProjectName }}
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           ReleaseBranch: ${{ env.defaultBranch }}
           MainGitBranch: ${{ env.defaultBranch }}
