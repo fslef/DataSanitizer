@@ -42,7 +42,7 @@ jobs:
           useConfigFile: false
 
       - name: Build & Package Module
-        run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks pack
+        run: pwsh ./build.ps1 -ResolveDependency -Tasks pack
         env:
           ProjectName: ${{ env.ProjectName }}
           ModuleVersion: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
