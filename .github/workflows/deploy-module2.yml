@@ -102,7 +102,7 @@ jobs:
           Write-Host "Runner: $($PSVersionTable.OS)"
           Write-Host "PWD: $(Get-Location)"
           Write-Host "Current PSModulePath:"
-          $env:PSModulePath -split ';' | ForEach-Object { Write-Host " - $_" }
+          ($env:PSModulePath -split [IO.Path]::PathSeparator) | ForEach-Object { Write-Host " - $_" }
 
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
