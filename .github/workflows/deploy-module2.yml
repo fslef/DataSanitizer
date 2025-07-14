@@ -93,6 +93,12 @@ jobs:
           name: ${{ env.buildArtifactName }}
           path: .
 
+      - name: Setup PowerShell 7.4.x
+        if: matrix.name != 'Windows_PowerShell5'
+        uses: actions/setup-powershell@v1
+        with:
+          version: '7.4.x'
+
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
         run: |
