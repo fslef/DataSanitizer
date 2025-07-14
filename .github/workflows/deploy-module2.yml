@@ -96,6 +96,14 @@ jobs:
           path: .
 
 
+      - name: DEBUG: PSModulePath (${{ matrix.name }})
+        shell: pwsh
+        run: |
+          "Runner: $($PSVersionTable.OS)"
+          "PWD: $(Get-Location)"
+          "Current PSModulePath:"
+          $env:PSModulePath -split ';' | ForEach-Object { " - $_" }
+
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
         run: |
