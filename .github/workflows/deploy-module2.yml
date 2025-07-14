@@ -58,6 +58,9 @@ jobs:
             ./tests/
             ./output/
             ./output/module/
+            ./Resolve-Dependency.ps1
+            ./Resolve-Dependency.psd1
+            ./RequiredModules.psd1
 
       - name: List output content
         run: |
