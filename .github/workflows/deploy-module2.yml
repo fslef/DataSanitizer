@@ -91,10 +91,11 @@ jobs:
           path: .
 
       - name: Run Unit Tests (${{ matrix.name }})
-        run: pwsh ./build.ps1 -Tasks test
+        shell: pwsh
+        run: |
+          ./build.ps1 -ResolveDependency -Tasks test
         env:
-          # ProjectName: ${{ env.ProjectName }}
-          path: ${{ env.buildFolderName }}
+          ProjectName: ${{ env.ProjectName }}
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
@@ -113,7 +114,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
-          # path: ${{ env.buildFolderName }}
 
       - name: Download Test Artifact (Linux)
         uses: actions/download-artifact@v4
@@ -139,8 +139,8 @@ jobs:
           name: CodeCoverageWinPS7
           path: ./${{ env.testResultFolderName }}
 
-      - name: Merge coverage files
-        run: pwsh ./build.ps1 -Tasks merge
+      - name: Run Merge Coverage Task
+        run: pwsh ./build.ps1 -Tasks Set_PSModulePath,merge
         env:
           ProjectName: ${{ env.ProjectName }}
 
