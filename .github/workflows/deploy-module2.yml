@@ -143,7 +143,7 @@ jobs:
           path: ./${{ env.testResultFolderName }}
 
       - name: Run Merge Coverage Task
-        run: pwsh ./build.ps1 -Tasks Set_PSModulePath,merge
+        run: pwsh ./build.ps1 -Tasks merge
         env:
           ProjectName: ${{ env.ProjectName }}
 
