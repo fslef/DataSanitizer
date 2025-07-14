@@ -1,0 +1,186 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: ["main"]
+    tags:
+      - "v*"
+    paths-ignore:
+      - "CHANGELOG.md"
+  pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - "CHANGELOG.md"
+  workflow_dispatch:
+
+env:
+  buildArtifactName: "DataSanitizer"
+  buildFolderName: "output"
+  testResultFolderName: "testResults"
+  defaultBranch: "main"
+  ProjectName: "DataSanitizer"
+
+jobs:
+  build:
+    name: Build Module
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion (v5.x)
+        uses: gittools/actions/gitversion/setup@v3.2.1
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine version (GitVersion)
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.2.1
+        with:
+          useConfigFile: false
+
+      - name: Build & Package Module
+        shell: pwsh
+        run: pwsh ./build.ps1 -ResolveDependency -UseModulefast -Tasks pack
+        env:
+          ProjectName: ${{ env.ProjectName }}
+          ModuleVersion: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: |
+            ./build.ps1
+            ./build.yaml
+            ./RequiredModules/
+            ./tests/
+            ./output/
+            ./output/module/
+            ./Resolve-Dependency.ps1
+            ./Resolve-Dependency.psd1
+            ./RequiredModules.psd1
+
+      - name: List output content
+        shell: pwsh
+        run: |
+          echo "Contenu de output :"
+          ls -R ./output || echo "output introuvable"
+
+  test:
+    name: Unit Tests Matrix
+    needs: build
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux
+            artifact: CodeCoverageLinux
+          - os: windows-latest
+            name: Windows_PowerShell7
+            artifact: CodeCoverageWinPS7
+          - os: windows-latest
+            name: Windows_PowerShell5
+            artifact: CodeCoverageWinPS51
+          - os: macos-latest
+            name: macOS
+            artifact: CodeCoverageMacOS
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: .
+
+
+      - name: Run Unit Tests (${{ matrix.name }})
+        shell: pwsh
+        run: |
+          ./build.ps1 -Tasks test
+        # env:
+        #   ProjectName: ${{ env.ProjectName }}
+
+      - name: Upload Test Results (${{ matrix.name }})
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
+
+  code_coverage:
+    name: Merge & Publish Code Coverage
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+
+      - name: Download Test Artifact (Linux)
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeCoverageLinux
+          path: ./${{ env.testResultFolderName }}
+
+      - name: Download Test Artifact (macOS)
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeCoverageMacOS
+          path: ./${{ env.testResultFolderName }}
+
+      - name: Download Test Artifact (Windows PS5.1)
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeCoverageWinPS51
+          path: ./${{ env.testResultFolderName }}
+
+      - name: Download Test Artifact (Windows PS7)
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeCoverageWinPS7
+          path: ./${{ env.testResultFolderName }}
+
+      - name: Run Merge Coverage Task
+        run: pwsh ./build.ps1 -Tasks merge
+        env:
+          ProjectName: ${{ env.ProjectName }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/JaCoCo_coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  deploy:
+    name: Deploy Module
+    needs: [code_coverage]
+    runs-on: ubuntu-latest
+    if: ${{ (github.event_name != 'pull_request') && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && success() }}
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}
+
+      - name: Publish Release
+        run: pwsh ./build.ps1 -Tasks publish
+        env:
+          ProjectName: ${{ env.ProjectName }}
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          GalleryApiToken: ${{ secrets.GALLERY_API_TOKEN }}
+          ReleaseBranch: ${{ env.defaultBranch }}
+          MainGitBranch: ${{ env.defaultBranch }}
+
+      - name: Create Changelog PR
+        run: pwsh ./build.ps1 -Tasks Create_ChangeLog_GitHub_PR
+        env:
+          ProjectName: ${{ env.ProjectName }}
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          ReleaseBranch: ${{ env.defaultBranch }}
+          MainGitBranch: ${{ env.defaultBranch }}
