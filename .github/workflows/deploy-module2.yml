@@ -99,10 +99,10 @@ jobs:
       - name: DEBUG: PSModulePath (${{ matrix.name }})
         shell: pwsh
         run: |
-          "Runner: $($PSVersionTable.OS)"
-          "PWD: $(Get-Location)"
-          "Current PSModulePath:"
-          $env:PSModulePath -split ';' | ForEach-Object { " - $_" }
+          Write-Host "Runner: $($PSVersionTable.OS)"
+          Write-Host "PWD: $(Get-Location)"
+          Write-Host "Current PSModulePath:"
+          $env:PSModulePath -split ';' | ForEach-Object { Write-Host " - $_" }
 
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
