@@ -100,8 +100,8 @@ jobs:
         shell: pwsh
         run: |
           ./build.ps1 -Tasks test
-        env:
-          ProjectName: ${{ env.ProjectName }}
+        # env:
+        #   ProjectName: ${{ env.ProjectName }}
 
       - name: Upload Test Results (${{ matrix.name }})
         if: ${{ always() }}
