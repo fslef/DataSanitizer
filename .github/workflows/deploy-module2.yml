@@ -98,12 +98,7 @@ jobs:
 
       - name: DEBUG: PSModulePath (${{ matrix.name }})
         shell: pwsh
-        run: |
-          Write-Host "Runner: $($PSVersionTable.OS)"
-          Write-Host "PWD: $(Get-Location)"
-          Write-Host "Current PSModulePath:"
-          $sep = [System.IO.Path]::PathSeparator
-          ($env:PSModulePath -split $sep) | ForEach-Object { Write-Host " - $_" }
+        run: Write-Host "PSModulePath: $env:PSModulePath"
 
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
