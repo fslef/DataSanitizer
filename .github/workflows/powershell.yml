@@ -12,8 +12,12 @@ name: PSScriptAnalyzer
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - ".github/workflows/**"
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - ".github/workflows/**"
   schedule:
     - cron: '15 9 * * 1'
 
