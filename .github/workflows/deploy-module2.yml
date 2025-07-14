@@ -99,7 +99,7 @@ jobs:
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
         run: |
-          ./build.ps1 -Tasks test -verbose
+          ./build.ps1 -Tasks test
         env:
           ProjectName: ${{ env.ProjectName }}
 
