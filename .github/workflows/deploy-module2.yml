@@ -96,15 +96,10 @@ jobs:
           path: .
 
 
-      - name: DEBUG: PSModulePath (${{ matrix.name }})
-        shell: pwsh
-        run: |
-          Write-Host "PSModulePath: $env:PSModulePath"
-
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
         run: |
-          ./build.ps1 -Tasks test
+          ./build.ps1 -Tasks test -verbose
         env:
           ProjectName: ${{ env.ProjectName }}
 
