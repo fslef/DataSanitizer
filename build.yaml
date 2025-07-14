@@ -153,10 +153,12 @@ BuildWorkflow:
     - publish_module_to_gallery
 
 ModuleBuildTasks:
+  Sampler:
+    - '*.build.Sampler.ib.tasks'
   Sampler.GitHubTasks:
     - '*.ib.tasks'
-  DscResource.Test:
-    - 'Task.*'
+  # DscResource.Test:
+  #   - 'Task.*'
   DscResource.DocGenerator:
     - 'Task.*'
 
