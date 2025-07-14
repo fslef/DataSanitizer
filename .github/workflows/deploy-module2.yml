@@ -98,7 +98,8 @@ jobs:
 
       - name: DEBUG: PSModulePath (${{ matrix.name }})
         shell: pwsh
-        run: Write-Host "PSModulePath: $env:PSModulePath"
+        run: |
+          Write-Host "PSModulePath: $env:PSModulePath"
 
       - name: Run Unit Tests (${{ matrix.name }})
         shell: pwsh
