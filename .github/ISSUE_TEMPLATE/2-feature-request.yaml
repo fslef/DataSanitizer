@@ -19,14 +19,14 @@ body:
       label: Problem or use case
       description: Please explain which problem this would solve, or what the use case is for the feature. Keep in mind that it's more likely to be implemented if it's generally useful for a larger number of users.
     validations:
-      required: true
+      required: false
   - type: textarea
     id: alternatives
     attributes:
       label: Alternatives or workarounds
       description: Please describe any alternatives or workarounds you have considered and, possibly, rejected.
     validations:
-      required: true
+      required: false
   - type: checkboxes
     id: terms
     attributes:
