@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fix the Changelog Format
+
+## [0.2.2] - 2025-07-17
+
+### Added
+
+- Fix the branching strategy doc
+
+## [0.2.1] - 2025-07-17
+
+### Added
+
+- Fix Typo in Changelog
+
+## [0.2.0] - 2025-07-17
+
 ### Added
 
 - **Module Bootstrap**
