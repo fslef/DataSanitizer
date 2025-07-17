@@ -30,6 +30,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `.github/ISSUE_TEMPLATE/config.yml` to disable blank issues and redirect users to a support contact page
 - **CI/CD**
   - Added PowerShell workflow for automated script analysis and SARIF upload.
+- **Development Environment Enhancements**:
+  - Added a new dev container configuration in `.devcontainer/devcontainer.json`
+  - Updated `.vscode/extensions.json` to recommend the `redhat.vscode-yaml` extension for YAML editing.
+  - Configured `.vscode/settings.json` for YAML schema validation and support for custom tags.
+- **Documentation**
+  - Introduced a `docs/.vitepress/config.mts` file to configure the VitePress site with navigation, sidebar, social links, and Mermaid.js integration for diagrams.
+  - Added a custom VitePress theme in `docs/.vitepress/theme/`, including a `style.css` file for overriding default styles and defining custom color variables.
+  - Expanded developer documentation with detailed guides on coding standards, contributing, development workflow, environment setup, testing, and releasing.
 
 ### Changed
 

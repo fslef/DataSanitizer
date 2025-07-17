@@ -30,7 +30,7 @@
     Copyright            = '(c) François Lefebvre. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description          = 'PowerShell module for identifying, and sanitizing personal and sensitive data.'
+Description          = 'PowerShell module for identifying, and sanitizing personal and sensitive data.'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion    = '5.0'
