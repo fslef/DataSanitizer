@@ -46,7 +46,7 @@ Pester:
       StackTraceVerbosity: Full
       CIFormat: Auto
     CodeCoverage:
-      CoveragePercentTarget: 10 # Set to 0 to bypass
+      CoveragePercentTarget: 85 # Set to 0 to bypass
       # Set to specific filename to override the default filename.
       #OutputPath: JaCoCo_coverage.xml
       OutputEncoding: ascii
