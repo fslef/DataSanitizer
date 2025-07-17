@@ -270,9 +270,19 @@ stages:
              pathToSources: '$(Build.SourcesDirectory)/$(dscBuildVariable.RepositoryName)/'
 
           # Uncomment if Codecov.io should be used (see docs at Codecov.io how to use and the required repository configuration).
-          - script: |
-             bash <(curl -s https://codecov.io/bash) -f "./$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml"
-            displayName: 'Publish Code Coverage to Codecov.io'
+          - bash: |
+              set -euo pipefail
+              curl -sSfL https://uploader.codecov.io/latest/linux/codecov -o codecov
+              chmod +x codecov
+              ./codecov \
+                -f "./$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml" \
+                -t "$CODECOV_TOKEN" \
+                -n "azure-$(Build.BuildId)" \
+                -F unittests \
+                -v
+            displayName: 'Upload coverage to Codecov (CLI)'
+            env:
+              CODECOV_TOKEN: $(CODECOV_TOKEN)
 
   - stage: Deploy
     dependsOn: Test
