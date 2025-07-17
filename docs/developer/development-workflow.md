@@ -30,12 +30,14 @@ gitGraph
 ```
 
 ## Branching Strategy
+
 - **main**: Stable, production-ready code.
 - **feat/**: New features.
 - **fix/**: Bug fixes.
 - **docs/**: Documentation updates.
 
 ## Pull Requests
+
 - All changes must go through a pull request.
 - Ensure your branch is up to date with `main` before opening a PR.
 - Reference related issues in your PR description.
