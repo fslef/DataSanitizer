@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **GitHub Copilot Configuration**
+  - [chatmode] Implementation plan generation chatmode
+  - [chatmode] Debugging chatmode
+  - [chatmode] 4.1 Beast Mode chatmode
+  - [prompt] Review and refactor prompt for code review
+  - [prompt] Prompt for creating a comprehensive implementation plan
+  - [instruction] Self-explanatory code commenting guidelines
+  - [instruction] PowerShell cmdlet development guidelines
+  - [instruction] PowerShell Pester v5 testing guidelines
+  - [instruction] Markdown content rules and validation instructions
+
 ## [0.2.3] - 2025-07-17
 
 - Fix the Changelog Format
