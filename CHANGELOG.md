@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- **Github Copilot Configuration**
+- **GitHub Copilot Configuration**
   - [chatmode] Implementation plan generation chatmode
   - [chatmode] Debugging chatmode
   - [chatmode] 4.1 Beast Mode chatmode
