@@ -8,15 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - **GitHub Copilot Configuration**
-  - [chatmode] Implementation plan generation chatmode
-  - [chatmode] Debugging chatmode
-  - [chatmode] 4.1 Beast Mode chatmode
-  - [prompt] Review and refactor prompt for code review
-  - [prompt] Prompt for creating a comprehensive implementation plan
-  - [instruction] Self-explanatory code commenting guidelines
-  - [instruction] PowerShell cmdlet development guidelines
-  - [instruction] PowerShell Pester v5 testing guidelines
-  - [instruction] Markdown content rules and validation instructions
+  - Added `chatmode` for Implementation plan generation
+  - Added `chatmode` for Debugging
+  - Added `chatmode` for 4.1 Beast Mode
+  - Added `prompt` for Review and refactor prompt for code review
+  - Added `prompt` for Prompt for creating a comprehensive implementation plan
+  - Added `instruction` for Self-explanatory code commenting guidelines
+  - Added `instruction` for PowerShell cmdlet development guidelines
+  - Added `instruction` for PowerShell Pester v5 testing guidelines
+  - Added `instruction` for Markdown content rules and validation instructions
 
 ## [0.2.3] - 2025-07-17
 
