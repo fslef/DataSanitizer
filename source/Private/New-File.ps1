@@ -43,7 +43,7 @@
         throw "FilePath cannot be null, empty, or whitespace."
     }
 
-    Write-OutputPadded "Checking file: $FilePath" -IdentLevel $IdentLevel -Type "Debug" -logfile $LogFile
+    Write-OutputPadded "Testing file: $FilePath" -IdentLevel $IdentLevel -Type "Debug" -logfile $LogFile
 
     # Normalize path for cross-platform compatibility
     $resolvedPath = $FilePath
