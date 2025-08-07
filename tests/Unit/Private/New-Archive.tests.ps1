@@ -8,7 +8,6 @@ BeforeAll {
 
 Describe 'New-Archive' {
     $srcFile = Join-Path $env:TEMP ("TestFile_" + [guid]::NewGuid() + ".txt")
-    $srcDir = Join-Path $env:TEMP ("TestDir_" + [guid]::NewGuid())
     $dest = Join-Path $env:TEMP ("TestArchive_" + [guid]::NewGuid() + ".zip")
     $logFile = Join-Path $env:TEMP ("TestLog_" + [guid]::NewGuid() + ".log")
 
