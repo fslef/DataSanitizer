@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **GitHub Copilot Configuration**
   - [chatmode] Implementation plan generation chatmode
   - [chatmode] Debugging chatmode
-  - [chatmode] 4.1 Beast Mode chatmode
+  - [chatmode] GPT 5 Beast Mode chatmode
   - [prompt] Review and refactor prompt for code review
   - [prompt] Prompt for creating a comprehensive implementation plan
   - [instruction] Self-explanatory code commenting guidelines
