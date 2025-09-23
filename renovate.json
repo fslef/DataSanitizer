@@ -53,7 +53,7 @@
       "description": "Update PowerShell module versions in RequiredModules.psd1",
       "fileMatch": ["^RequiredModules\\.psd1$"],
       "matchStrings": [
-        "\\s+(?<depName>[\\w\\.'-]+)\\s+=\\s+'(?<currentValue>[^']+)'"
+        "\\s+(?<depName>[\\w\\.]+)\\s+=\\s+'(?<currentValue>[^']+)'"
       ],
       "datasourceTemplate": "nuget",
       "registryUrlTemplate": "https://www.powershellgallery.com/api/v2"
