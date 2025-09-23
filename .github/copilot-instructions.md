@@ -269,9 +269,9 @@ npm run docs:dev
 
 ## Known Issues and Workarounds
 
-1. **Documentation Build Failure**: `npm run docs:build` fails due to dead link in `developer/contributing.md`
-   - **Workaround**: Use `npm run docs:dev` for development
-
+1. **Documentation Build Failure**: `npm run docs:build` fails due to a dead link in `developer/contributing.md`. The dead link is to `[Sampler Framework Documentation](https://github.com/nightroman/Sampler/blob/master/docs/index.md)`, which no longer exists or is unreachable.
+   - **How to identify**: Open `developer/contributing.md` and search for links. The dead link is the one pointing to the Sampler documentation above. You can verify by clicking the link or running a link checker.
+   - **How to fix**: Update the link to a working URL, remove it, or replace it with an archived version if available.
 2. **Network Dependency**: Full builds require PowerShell Gallery access
    - **Workaround**: Use manual module import for offline development
 
