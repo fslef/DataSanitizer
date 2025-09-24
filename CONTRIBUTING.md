@@ -79,5 +79,15 @@ People *love* thorough bug reports. I'm not even kidding.
 ## Use a Consistent Coding Style
 Don't worry about this, if you are using vscode, every coding rules and code litning extensions are already configured in the [vscode/settings.json](.vscode/settings.json)
 
+## Automated Dependency Management
+This project uses [Renovate](https://docs.renovatebot.com/) to automatically manage dependencies. Renovate will:
+- Monitor npm packages in `package.json`
+- Monitor PowerShell modules in `RequiredModules.psd1` and `Resolve-Dependency.psd1`
+- Monitor Node.js version in `.devcontainer/devcontainer.json`
+- Create pull requests for major and minor version updates (patch updates are ignored)
+- Group related updates together to reduce PR noise
+
+You don't need to manually update dependencies in most cases - Renovate will handle it automatically.
+
 ## License
 By contributing, you agree that your contributions will be licensed under its MIT License.
