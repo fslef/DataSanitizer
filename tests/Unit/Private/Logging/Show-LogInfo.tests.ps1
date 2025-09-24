@@ -119,6 +119,29 @@ Describe Show-LogInfo {
             { Show-LogInfo -Message 'Test log message' -LogFile $script:tempLogFile -NoConsole } | Should -Not -Throw
             Test-Path $script:tempLogFile | Should -Be $true
         }
+
+        It 'Should write Title with special formatting to log file' {
+            Show-LogInfo -Message 'Test Title' -Title -LogFile $script:tempLogFile
+            $logContent = Get-Content $script:tempLogFile -Raw
+            $logContent | Should -Match 'Test Title'
+            # Should contain separators for title formatting
+            $logContent | Should -Match '=+'
+            $logContent | Should -Match '-+'
+        }
+
+        It 'Should write Subtitle with special formatting to log file' {
+            Show-LogInfo -Message 'Test Subtitle' -Subtitle -LogFile $script:tempLogFile
+            $logContent = Get-Content $script:tempLogFile -Raw
+            $logContent | Should -Match 'Test Subtitle'
+        }
+
+        It 'Should write Title with timestamp formatting to log file' {
+            Show-LogInfo -Message 'Test Title Message' -Title -LogFile $script:tempLogFile
+            $logContent = Get-Content $script:tempLogFile -Raw
+            # Should contain the timestamp format
+            $logContent | Should -Match '\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
+            $logContent | Should -Match 'Test Title Message'
+        }
     }
 
     Context 'When testing error conditions' {
@@ -197,6 +220,12 @@ Describe Show-LogInfo {
 
         It 'Should work with all compatible options together' {
             { Show-LogInfo -Message 'Complex message' -MessageType 'Information' -Indent 1 -Width 100 -BlankLine } | Should -Not -Throw
+        }
+
+        It 'Should accept Pause parameter without attempting to pause in test' {
+            # Test that the Pause parameter is accepted (testing in non-interactive mode)
+            # We'll test this by checking the function accepts the parameter
+            (Get-Command Show-LogInfo).Parameters.ContainsKey('Pause') | Should -Be $true
         }
     }
 }
