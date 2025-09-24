@@ -81,7 +81,6 @@ function Show-LogInfo {
     if (-not $PSBoundParameters.ContainsKey('LogFile') -or [string]::IsNullOrWhiteSpace($LogFile)) {
         $defaultLogFile = $null
         # Prefer module script scope if available
-        if ($PSBoundParameters.ContainsKey('psla')) { }
         if ($null -ne $script:psla -and $null -ne $script:psla.settings -and $null -ne $script:psla.settings.LogFilePath) {
             $defaultLogFile = $script:psla.settings.LogFilePath
         }
