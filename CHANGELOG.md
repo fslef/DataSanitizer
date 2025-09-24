@@ -18,7 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - [instruction] PowerShell Pester v5 testing guidelines
   - [instruction] Markdown content rules and validation instructions
   - Added Copilot development instructions
-  - Added Renovate configuration for automated dependency management
+  
+- Added Renovate configuration for automated dependency management
+- Added unit test for 'Show-LogInfo'
 
 ## [0.2.3] - 2025-07-17
 
