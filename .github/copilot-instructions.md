@@ -20,7 +20,7 @@ Get-Something -Data 'my test change' -Verbose
 # Basic functionality
 Get-Something -Data 'validation test' -Verbose
 # Pipeline
-'test1', 'test2' | Get-Something  
+'test1', 'test2' | Get-Something
 # WhatIf
 Get-Something -Data 'test' -WhatIf
 # Static analysis
@@ -58,12 +58,12 @@ npm run docs:preview          # Preview built docs
 
 ```powershell
 # Bootstrap dependencies (NEVER CANCEL - takes 10-15 minutes on first run)
-./build.ps1 -ResolveDependency  
+./build.ps1 -ResolveDependency
 
 # Full build (NEVER CANCEL - takes 5-10 minutes)
 ./build.ps1 -Tasks build
 
-# Run all tests (NEVER CANCEL - takes 3-5 minutes)  
+# Run all tests (NEVER CANCEL - takes 3-5 minutes)
 ./build.ps1 -Tasks test
 
 # Default build and test (NEVER CANCEL - takes 15-20 minutes total)
@@ -87,7 +87,7 @@ npm run docs:preview          # Preview built docs
 Get-Something -Data 'validation test' -Verbose
 
 # 2. Pipeline support
-'test1', 'test2' | Get-Something  
+'test1', 'test2' | Get-Something
 
 # 3. WhatIf parameter support
 Get-Something -Data 'test' -WhatIf
@@ -100,7 +100,7 @@ Invoke-ScriptAnalyzer -Path source/Public/Get-Something.ps1
 ```
 
 ### Automated Testing (Requires Network)
-- **Pester Location**: `tests/Unit/` and `tests/QA/`  
+- **Pester Location**: `tests/Unit/` and `tests/QA/`
 - **Coverage Target**: 85% (configured in build.yaml)
 - **Dependencies**: Requires built module from full build process
 
@@ -129,7 +129,7 @@ Invoke-Pester -Path tests/Unit/Public/Get-Something.tests.ps1 -Output Detailed
 # Test basic functionality
 Get-Something -Data 'validation test' -Verbose
 
-# Test pipeline functionality  
+# Test pipeline functionality
 'test1', 'test2' | Get-Something
 
 # Test WhatIf support
@@ -190,8 +190,12 @@ docs/                         # VitePress documentation
 ## Common Development Tasks
 
 ### Adding New Functions
-1. Create function file in `source/Public/` or `source/Private/`
-2. Include complete comment-based help
+1. Each function MUST be placed in its own `.ps1` file within `source/Public/` or `source/Private/`. This ensures maintainability, clarity, and supports best practices for PowerShell module development.
+2. Each function MUST include a comment-based help block with at least:
+   - .SYNOPSIS
+   - .DESCRIPTION (Greater Than 40 Characters)
+   - At least one .EXAMPLE
+   - All parameters described with .PARAMETER
 3. Create corresponding unit test in `tests/Unit/`
 4. Test manually before running full build:
    ```powershell
@@ -263,7 +267,7 @@ npm run docs:dev
 # Should show: "Build succeeded" and create output/module/ directory
 
 # Expected: Tests pass with coverage report
-./build.ps1 -Tasks test  
+./build.ps1 -Tasks test
 # Should show: "Tests Passed: X, Failed: 0" and coverage percentage
 ```
 
