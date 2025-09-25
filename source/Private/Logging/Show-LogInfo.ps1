@@ -48,6 +48,7 @@ function Show-LogInfo {
     [CmdletBinding()]
     param (
         [Parameter(Position = 0, Mandatory = $true)]
+        [AllowEmptyString()]
         [string]$Message,
         [Parameter(Position = 1, Mandatory = $false)]
         [int]$Indent = 0,
@@ -113,20 +114,14 @@ function Show-LogInfo {
     $bulletPrefix = $Bullet ? ('- ') : ''
     $linePrefix = $Bullet ? ($indentSpaces.Substring(0, $indentSpaces.Length - 2) + $bulletPrefix) : $indentSpaces
     $effectiveWidth = $Width - $linePrefix.Length
-    # Custom word wrap to fit message to effective width (avoids external dependencies)
-    $wrappedLines = @()
-    $words = $Message -split '\s+'
-    $currentLine = ''
-    foreach ($word in $words) {
-        if (($currentLine.Length + $word.Length + 1) -le $effectiveWidth) {
-            $currentLine += ($currentLine.Length -gt 0 ? ' ' : '') + $word
-        }
-        else {
-            $wrappedLines += $currentLine
-            $currentLine = $word
-        }
+    
+    # Ensure effective width is at least 1 to avoid infinite loops or errors
+    if ($effectiveWidth -lt 1) {
+        $effectiveWidth = 1
     }
-    if ($currentLine) { $wrappedLines += $currentLine }
+    
+    # Use dedicated Format-WordWrap function for reliable text wrapping
+    $wrappedLines = Format-WordWrap -Message $Message -Width $effectiveWidth
     if ($BlankLine) {
         # PSScriptAnalyzer: disable=PSAvoidUsingWriteHost
         Write-Host ""
