@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Renovate Configuration**
+  - Fixed invalid configuration combining `matchUpdateTypes` and `ignoreUnstable` properties in npm dependencies package rule
+  - Removed `ignoreUnstable` property to resolve Renovate validation error
+
 - **GitHub Copilot Configuration**
   - [chatmode] Implementation plan generation chatmode
   - [chatmode] Debugging chatmode

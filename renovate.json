@@ -15,8 +15,7 @@
       "description": "Group all npm dependencies together",
       "matchManagers": ["npm"],
       "groupName": "npm dependencies",
-      "matchUpdateTypes": ["major", "minor"],
-      "ignoreUnstable": true
+      "matchUpdateTypes": ["major", "minor"]
     },
     {
       "description": "PowerShell modules in RequiredModules.psd1",
