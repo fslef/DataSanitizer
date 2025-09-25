@@ -1,12 +1,13 @@
 BeforeAll {
     $script:dscModuleName = 'DataSanitizer'
 
-    Import-Module -Name $script:dscModuleName
+    # Import the functions directly for testing
+    . $PSScriptRoot/../../../source/Public/Get-Something.ps1
+    . $PSScriptRoot/../../../source/Private/Get-PrivateFunction.ps1
 }
 
 AfterAll {
-    # Unload the module being tested so that it doesn't impact any other tests.
-    Get-Module -Name $script:dscModuleName -All | Remove-Module -Force
+    # No module cleanup needed since we're not loading a module
 }
 
 Describe Get-Something {
@@ -14,14 +15,14 @@ Describe Get-Something {
         Mock -CommandName Get-PrivateFunction -MockWith {
             # This returns the value passed to the Get-PrivateFunction parameter $PrivateData.
             $PrivateData
-        } -ModuleName $dscModuleName
+        }
     }
 
     Context 'When passing values using named parameters' {
         It 'Should call the private function once' {
             { Get-Something -Data 'value' } | Should -Not -Throw
 
-            Should -Invoke -CommandName Get-PrivateFunction -Exactly -Times 1 -Scope It -ModuleName $dscModuleName
+            Should -Invoke -CommandName Get-PrivateFunction -Exactly -Times 1 -Scope It
         }
 
         It 'Should return a single object' {
@@ -41,7 +42,7 @@ Describe Get-Something {
         It 'Should call the private function two times' {
             { 'value1', 'value2' | Get-Something } | Should -Not -Throw
 
-            Should -Invoke -CommandName Get-PrivateFunction -Exactly -Times 2 -Scope It -ModuleName $dscModuleName
+            Should -Invoke -CommandName Get-PrivateFunction -Exactly -Times 2 -Scope It
         }
 
         It 'Should return an array with two items' {
@@ -78,7 +79,7 @@ Describe Get-Something {
         It 'Should not call the private function' {
             { Get-Something -Data 'value' -WhatIf } | Should -Not -Throw
 
-            Should -Invoke -CommandName Get-PrivateFunction -Exactly -Times 0 -Scope It -ModuleName $dscModuleName
+            Should -Invoke -CommandName Get-PrivateFunction -Exactly -Times 0 -Scope It
         }
 
         It 'Should return $null' {
