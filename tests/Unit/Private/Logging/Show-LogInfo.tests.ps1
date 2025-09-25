@@ -1,6 +1,7 @@
 BeforeAll {
-    # Import the function directly for testing
+    # Import the functions directly for testing
     . $PSScriptRoot/../../../../source/Private/Logging/Show-LogInfo.ps1
+    . $PSScriptRoot/../../../../source/Private/Logging/Format-WordWrap.ps1
 }
 
 Describe Show-LogInfo {
@@ -206,6 +207,26 @@ Describe Show-LogInfo {
 
         It 'Should handle messages with bullet point width calculation' {
             { Show-LogInfo -Message 'Test bullet message' -Bullet -Indent 2 -Width 50 } | Should -Not -Throw
+        }
+
+        It 'Should handle empty messages gracefully' {
+            { Show-LogInfo -Message '' -Width 20 } | Should -Not -Throw
+        }
+
+        It 'Should handle very narrow effective widths' {
+            { Show-LogInfo -Message 'Test' -Width 8 -Indent 2 } | Should -Not -Throw
+        }
+
+        It 'Should normalize multiple consecutive spaces' {
+            { Show-LogInfo -Message 'word1     word2' -Width 20 } | Should -Not -Throw
+        }
+
+        It 'Should handle messages with newlines and tabs' {
+            { Show-LogInfo -Message "Line1`tTabbed`nLine2" -Width 20 } | Should -Not -Throw
+        }
+
+        It 'Should handle centered text with word wrapping' {
+            { Show-LogInfo -Message 'This is a centered message that should wrap properly' -Width 30 -Centered } | Should -Not -Throw
         }
     }
 
