@@ -30,7 +30,7 @@
 
     #AllowOldPowerShellGetModule = $true
     #MinimumPSDependVersion = '0.3.0'
-    AllowPrerelease = $false
+    AllowPrerelease = $true
     WithYAML        = $true # Will also bootstrap PowerShell-Yaml to read other config files
 
     <#
@@ -57,17 +57,17 @@
         script and correct parameter values. This will also affect the use of parameter
         `-UseModuleFast` of the Resolve-Dependency.ps1 or build.ps1 script.
     #>
-    #UseModuleFast = $true
-    #ModuleFastVersion = '0.1.2'
-    #ModuleFastBleedingEdge = $true
+    UseModuleFast = $true
+    ModuleFastVersion = '0.5.1'
+    ModuleFastBleedingEdge = $true
 
     <#
         Enable PSResourceGet to be the default method of resolving dependencies by setting
         UsePSResourceGet to the value $true. If UsePSResourceGet is not configured or
         set to $false then PowerShellGet will be used to resolve dependencies.
     #>
-    UsePSResourceGet = $true
-    PSResourceGetVersion = '1.0.1'
+    #UsePSResourceGet = $true
+    #PSResourceGetVersion = '1.0.1'
 
     # PowerShellGet compatibility module only works when using PSResourceGet or ModuleFast.
     UsePowerShellGetCompatibilityModule = $true
