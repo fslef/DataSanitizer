@@ -30,7 +30,7 @@
     Copyright            = '(c) François Lefebvre. All rights reserved.'
 
     # Description of the functionality provided by this module
-Description          = 'PowerShell module for identifying, and sanitizing personal and sensitive data.'
+    Description          = 'PowerShell module for identifying, and sanitizing personal and sensitive data.'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion    = '5.0'
@@ -66,11 +66,17 @@ Description          = 'PowerShell module for identifying, and sanitizing person
     # FormatsToProcess = @()
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    # NestedModules = @()
+    NestedModules        = @(
+        @{ModuleName      = "PSFramework";
+            ModuleVersion = "1.13.406";
+            GUID          = "8028b914-132b-431f-baa9-94a6952f21ff"
+        }
+    )
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport    = @()
 
+    
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport      = @()
 
