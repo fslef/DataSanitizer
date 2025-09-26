@@ -24,5 +24,5 @@
     'DscResource.Test'          = 'latest'
     PlatyPS                     = 'latest'
     'DscResource.DocGenerator'  = 'latest'
-
+    PSFramework                 = '1.13.406'
 }
