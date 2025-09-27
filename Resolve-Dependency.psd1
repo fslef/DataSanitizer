@@ -2,13 +2,16 @@
     <#
         Default parameter values to be loaded by the Resolve-Dependency.ps1 script (unless set in bound parameters
         when calling the script).
+
+        NOTE: To revert to the method PowerShellGet & PSDepend either remove the properties 'UsePSResourceGet' and
+        'UseModuleFast' or set them to $false. Also, in the file RequiredModules.psd1 uncomment the property
+        'PSDependOptions' which is required for PSDepend.
     #>
 
     #PSDependTarget  = './output/modules'
     #Proxy = ''
     #ProxyCredential = '$MyCredentialVariable' #TODO: find a way to support credentials in build (resolve variable)
-
-    Gallery         = 'PSGallery'
+    Gallery                                    = 'PSGallery'
 
     # To use a private nuget repository change the following to your own feed. The locations must be a Nuget v2 feed due
     # to limitation in PowerShellGet v2.x. Example below is for a Azure DevOps Server project-scoped feed. While resolving
@@ -29,9 +32,12 @@
     #}
 
     #AllowOldPowerShellGetModule = $true
+
+    # Only works when using PowerShellGet, not with ModuleFast.
     #MinimumPSDependVersion = '0.3.0'
-    AllowPrerelease = $true
-    WithYAML        = $true # Will also bootstrap PowerShell-Yaml to read other config files
+
+    AllowPrerelease                            = $false
+    WithYAML                                   = $true # Will also bootstrap PowerShell-Yaml to read other config files
 
     <#
         Enable ModuleFast to be the default method of resolving dependencies by setting
@@ -57,20 +63,19 @@
         script and correct parameter values. This will also affect the use of parameter
         `-UseModuleFast` of the Resolve-Dependency.ps1 or build.ps1 script.
     #>
-    UseModuleFast = $true
-    ModuleFastVersion = '0.5.1'
-    ModuleFastBleedingEdge = $true
+    #UseModuleFast = $true
+    #ModuleFastVersion = '0.1.2'
+    #ModuleFastBleedingEdge = $true
 
     <#
         Enable PSResourceGet to be the default method of resolving dependencies by setting
         UsePSResourceGet to the value $true. If UsePSResourceGet is not configured or
         set to $false then PowerShellGet will be used to resolve dependencies.
     #>
-    #UsePSResourceGet = $true
-    #PSResourceGetVersion = '1.0.1'
+    UsePSResourceGet                           = $true
+    PSResourceGetVersion                       = '1.0.1'
 
     # PowerShellGet compatibility module only works when using PSResourceGet or ModuleFast.
-    UsePowerShellGetCompatibilityModule = $true
+    UsePowerShellGetCompatibilityModule        = $true
     UsePowerShellGetCompatibilityModuleVersion = '3.0.23-beta23'
 }
-
