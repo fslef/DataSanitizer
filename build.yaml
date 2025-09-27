@@ -7,7 +7,7 @@ BuiltModuleSubdirectory: module
 VersionedOutputDirectory: true
 CopyPaths:
   - en-US
-#  - DSCResources
+  - Localization
   # - Modules
 Encoding: UTF8
 
