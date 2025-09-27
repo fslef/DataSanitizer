@@ -12,7 +12,7 @@
     .PARAMETER DestinationPath
         The path to the directory where the contents will be extracted.
 
-    .PARAMETER IdentLevel
+    .PARAMETER Indent
         Indentation level for output messages. Default is 0.
 
     .PARAMETER Overwrite
@@ -34,7 +34,7 @@
         [string]$DestinationPath,
 
         [Parameter(Mandatory = $false)]
-        [int]$IdentLevel = 0,
+        [int]$Indent = 0,
 
         [Parameter(Mandatory = $false)]
         [switch]$Overwrite,
@@ -47,35 +47,35 @@
     $DestinationPathFull = $DestinationPath
 
     if (-not (Test-Path -Path $ArchivePathFull -PathType Leaf)) {
-        Write-OutputPadded "Archive file not found: $ArchivePath" -IdentLevel $IdentLevel -Type Error -LogFile $LogFile
+        Write-LogInfo -Message "Archive file not found: $ArchivePath" -Indent $Indent -MessageType Error -LogFile $LogFile
         throw "Archive file not found: $ArchivePath"
     }
 
     if ($Overwrite -and (Test-Path -Path $DestinationPathFull -PathType Container) -and ($PSLA.Debug.SkipArchiveExtraction -ne $true)) {
         if ($PSCmdlet.ShouldProcess($DestinationPathFull, 'Remove destination directory for overwrite')) {
             Remove-Item -Path $DestinationPathFull -Recurse -Force | Out-Null
-            Write-OutputPadded "Destination directory removed: $DestinationPath" -IdentLevel $IdentLevel -Type Verbose -LogFile $LogFile
+            Write-LogInfo -Message "Destination directory removed: $DestinationPath" -Indent $Indent -MessageType Verbose -LogFile $LogFile
         }
     }
 
     if ($PSCmdlet.ShouldProcess($DestinationPathFull, 'Create destination directory')) {
-        New-Folder $DestinationPathFull -IdentLevel $IdentLevel -LogFile $LogFile
+        New-Folder $DestinationPathFull -Indent $Indent -LogFile $LogFile
     }
 
-    Write-OutputPadded "Destination directory: $DestinationPath" -IdentLevel $IdentLevel -Type Verbose -LogFile $LogFile
+    Write-LogInfo -Message "Destination directory: $DestinationPath" -Indent $Indent -MessageType Verbose -LogFile $LogFile
 
     if (!$PSLA.Debug.SkipArchiveExtraction) {
         try {
             Add-Type -AssemblyName System.IO.Compression.FileSystem
             if ($PSCmdlet.ShouldProcess($ArchivePathFull, "Extract archive to $DestinationPathFull")) {
                 Expand-Archive -Path $ArchivePathFull -DestinationPath $DestinationPathFull
-                Write-OutputPadded "Archive extracted successfully to: $DestinationPath" -IdentLevel $IdentLevel -Type Success -LogFile $LogFile
+                Write-LogInfo -Message "Archive extracted successfully to: $DestinationPath" -Indent $Indent -MessageType Success -LogFile $LogFile
             }
         } catch {
-            Write-OutputPadded "Error extracting archive: $ArchivePath to $DestinationPath. Error: $_" -IdentLevel $IdentLevel -Type Error -LogFile $LogFile
+            Write-LogInfo -Message "Error extracting archive: $ArchivePath to $DestinationPath. Error: $_" -Indent $Indent -MessageType Error -LogFile $LogFile
             throw
         }
     } else {
-        Write-OutputPadded "[Simulated] Archive extracted successfully to: $DestinationPath" -IdentLevel $IdentLevel -Type Success -LogFile $LogFile
+        Write-LogInfo -Message "[Simulated] Archive extracted successfully to: $DestinationPath" -Indent $Indent -MessageType Success -LogFile $LogFile
     }
 }
