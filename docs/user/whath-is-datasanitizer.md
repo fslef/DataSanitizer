@@ -4,14 +4,14 @@ DataSanitizer is a PowerShell module designed to detect and remove sensitive inf
 
 ## Use Cases
 
-- **Anonymize Log Files**
   You have log files you want to share with a support team, but they contain sensitive information. DataSanitizer helps you automatically remove or mask personal data (like usernames, IP addresses, and email addresses) so you can safely share logs without exposing private details.
 
-- **Prepare Data for Testing**
   You need to use real-world data for software testing, but it contains private or sensitive information. DataSanitizer helps you anonymize or redact this data, ensuring compliance with privacy standards while enabling effective development and analysis.
 
-- **Validate Data Before Import**
   Before importing external data into your systems or databases, you want to ensure it does not contain sensitive or unwanted information. DataSanitizer can scan and clean incoming files, helping prevent accidental exposure of private data and maintaining the integrity of your environment.
+
+- **Code Review & API Security**
+  During code review or API development, DataSanitizer can help detect and prevent exposure of sensitive information in code, configuration files, or API responses. This ensures privacy compliance and reduces the risk of leaking personal or confidential data.
 
 ## Data Detected
 
