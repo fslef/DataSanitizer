@@ -46,4 +46,3 @@ Support is available if you need help. Choose the option below that best fits yo
 > Did you find a reproducible issue with this PowerShell module?
 >
 > - 👉 [Report a bug on GitHub](https://github.com/fslef/DataSanitizer/issues/new?labels=bug&template=bug_report.md)
-
