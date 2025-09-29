@@ -44,7 +44,14 @@ function Import-DsConfig {
         # if $ConfigFile, load it
         if ($ConfigFile) {
             Write-PSFMessage -Level Verbose -String "Import-DSConfig.ConfigFilePath" -StringValues $ConfigFile
-            Import-PSFConfig -Path $ConfigFile -Schema MetaJson
+            try {
+                Import-PSFConfig -Path $ConfigFile -Schema MetaJson
+                # Update module parameter only if import succeeds
+                Set-PSFConfig -Module DataSanitizer -Name path.DSConfigFile -Value $ConfigFile
+            } catch {
+                # Log error details for troubleshooting
+                Write-PSFMessage -Level Error -Message "Failed to import config file: $ConfigFile" -StringValues $_.Exception.Message
+            }
         }
 
         # if debug mode prefernce
