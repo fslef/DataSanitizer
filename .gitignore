@@ -20,3 +20,5 @@ package-lock.json
 # VitePress build and cache
 /docs/.vitepress/dist
 /docs/.vitepress/cache
+
+coverage.xml
