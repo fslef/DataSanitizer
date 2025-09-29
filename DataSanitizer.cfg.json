@@ -1,0 +1,9 @@
+{
+    "Version": 1,
+    "Static": {
+        "PSFramework.Localization.Language": "fr-FR",
+        "PSFramework.Localization.LoggingLanguage": "fr-FR",
+        "DataSanitizer.path.DSrootFolder": "/Users/francois/gitrepos/fslef/dataSanitizer/.automatedlab/rootDsFolder",
+        "DataSanitizer.path.DSIncidentFolder": "/Users/francois/gitrepos/fslef/dataSanitizer/.automatedlab/rootDsFolder/IntermediateOrg/Inc1"
+    }
+}
