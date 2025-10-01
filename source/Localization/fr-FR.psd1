@@ -9,8 +9,9 @@
     "Initialize-DsFolder.AddingConfigFolder"       = "Ajout du dossier _Config sous la racine : {0}"
     "Initialize-DsFolder.AddingIntermediateFolder" = "Ajout du dossier Intermediate {0} sous la racine {0}"
     "Initialize-DsFolder.AddingLogFolder"     = "Ajout du dossier de Log sous: {0}"
-
     "Initialize-DsFolder.AddingConfigFile"         = "Ajout du fichier de configuration DataSanitizer.cfg.json"
+    "Initialize-DsFolder.AddingDetectionRulesFile" = "Ajout du fichier de configuration DetectionRules.cfg.json dans : {0}"
+    "New-DSDetectionConfig.Confirmation"           = "Nouveau fichier de configuration de règle de détection créé: {0}"
     "Show-Disclaimer.skipped"                      = "Disclaimer Ignoré conformément à la configuration"
     "Import-DSConfig.start"                        = "Import des paramètres de DSConfig"
     "Import-DSConfig.defaults"                     = "Chargement des paramètres par défaut de DSConfig"

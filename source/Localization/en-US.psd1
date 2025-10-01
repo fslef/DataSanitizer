@@ -11,6 +11,8 @@
     "Initialize-DsFolder.AddingLogFolder"          = "Adding Log folder under: {0}"
     "Initialize-DsFolder.CanceledNotEmpty"         = "CANCELED The target folder {0} is not empty. Please provide an empty folder"
     "Initialize-DsFolder.AddingConfigFile"         = "Adding DataSanitizer.cfg.json config file "
+    "Initialize-DsFolder.AddingDetectionRulesFile" = "Adding DetectionRules.cfg.json config file in: {0}"
+    "New-DSDetectionConfig.Confirmation"           = "New detection rules configuration file created at: {0}"
     "Show-Disclaimer.skipped"                      = "Disclaimer skipped as per configuration"
     "Import-DSConfig.start"                        = "Importing DSConfig settings"
     "Import-DSConfig.defaults"                     = "loading default DSConfig settings"
