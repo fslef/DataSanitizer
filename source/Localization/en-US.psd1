@@ -1,11 +1,19 @@
 @{
-    'Disclaimer'                     = @'
-This is a long block string example for English (US).
-It can span multiple lines and is used to demonstrate PSFramework localization features.
-You can add more details here as needed.
+    "Show-Disclaimer.message"                      = @'
+    DISCLAIMER: This data anonymization tool is provided 'as is' without warranty of any kind,
+    either express or implied, including but not limited to the implied warranties of merchantability and fitness
+    for a particular purpose. It may not detect all data that needs to be anonymized. Therefore, the user must
+    review the content of the data before transmitting the data to any internal or external party.
 '@
-    "Import-DSConfig.start"          = "Importing DSConfig settings"
-    "Import-DSConfig.defaults"       = "loading default DSConfig settings"
-    "Import-DSConfig.ConfigFilePath" = "Surcharging default DSConfig settings with: {0}"
-    "Import-DSConfig.complete"       = "DSConfig settingsimport completed"
+    "Initialize-DsFolder.Start"                    = "Starting initialization of DataSanitizer folder structure at: {0}"
+    "Initialize-DsFolder.AddingConfigFolder"       = "Adding _Config folder under root: {0}"
+    "Initialize-DsFolder.AddingIntermediateFolder" = "Adding Intermediate {0} folder under root: {1}"
+    "Initialize-DsFolder.AddingLogFolder"          = "Adding Log folder under: {0}"
+    "Initialize-DsFolder.CanceledNotEmpty"         = "CANCELED The target folder {0} is not empty. Please provide an empty folder"
+    "Initialize-DsFolder.AddingConfigFile"         = "Adding DataSanitizer.cfg.json config file "
+    "Show-Disclaimer.skipped"                      = "Disclaimer skipped as per configuration"
+    "Import-DSConfig.start"                        = "Importing DSConfig settings"
+    "Import-DSConfig.defaults"                     = "loading default DSConfig settings"
+    "Import-DSConfig.ConfigFilePath"               = "Surcharging default DSConfig settings with: {0}"
+    "Import-DSConfig.complete"                     = "DSConfig settingsimport completed"
 }
