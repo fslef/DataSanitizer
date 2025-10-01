@@ -4,4 +4,6 @@ function Get-DSConfig {
     param()
 
     Get-PSFConfig -Module DataSanitizer
+
+    Get-PSFConfig -Module PSFramework -Name *Language
 }
