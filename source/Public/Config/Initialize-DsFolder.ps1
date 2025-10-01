@@ -1,0 +1,82 @@
+function Initialize-DsFolder {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [PsfDirectory]$RootFolder,
+
+        [String]$IntermediateFolderName
+    )
+
+    begin {
+        # Import both language resource files so that Get-PSFLocalizedString can resolve either language.
+        Import-PSFLocalizedString -Module DataSanitizer -Path (Join-Path $PSScriptRoot -ChildPath ./Localization/en-US.psd1) -Language 'en-US'
+        Import-PSFLocalizedString -Module DataSanitizer -Path (Join-Path $PSScriptRoot -ChildPath ./Localization/fr-FR.psd1) -Language 'fr-FR'
+    }
+
+    process {
+
+        Write-PSFMessage -Module DataSanitizer -Level Important -String 'Initialize-DsFolder.Start' -StringValues $RootFolder
+
+        # Check the folder is empty, break if not
+        if ((Get-ChildItem -Path $RootFolder -Recurse | Measure-Object).Count -gt 0) {
+            throw "CANCELED The target folder is not empty. Please provide an empty folder."
+        }
+
+        # Preparing the folders
+
+        # Adding _Config Folder under root
+        Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingConfigFolder' -StringValues $RootFolder
+        New-Item -Path $RootFolder -Name "_Config" -ItemType Directory | Out-Null
+
+        [PsfDirectory] $ConfigFolderPath = Join-Path -Path $RootFolder -ChildPath "_Config"
+
+        # Add _Intermediate Folder
+        if ($IntermediateFolderName) {
+            Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingIntermediateFolder' -StringValues $IntermediateFolderName, $RootFolder
+
+            New-Item -Path $RootFolder -Name $IntermediateFolderName -ItemType Directory | Out-Null
+
+            [PsfDirectory] $IntermediateFolderPath = Join-Path -Path $RootFolder -ChildPath $IntermediateFolderName
+
+            Set-PSFConfig -Module DataSanitizer -Name 'Path.DSIntermediateFolder' -Value $IntermediateFolderPath -Validation string -Initialize -Description "The Intermediate folder for DataSanitizer."
+        }
+
+        # Adding First Log Folder
+        if ($IntermediateFolderName) {
+            Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingLogFolder' -StringValues $IntermediateFolderPath
+
+            New-Item -Path $IntermediateFolderPath -Name "LogFolder" -ItemType Directory | Out-Null
+
+            [PsfDirectory] $LogFolderPath = Join-Path -Path $IntermediateFolderPath -ChildPath "LogFolder"
+
+            Set-PSFConfig -Module DataSanitizer -Name 'Path.DSLogFolder' -Value $LogFolderPath -Validation string -Initialize -Description "The Log folder for DataSanitizer."
+        }
+        else {
+            Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingLogFolder' -StringValues $RootFolder
+
+            New-Item -Path $RootFolder -Name "LogFolder" -ItemType Directory | Out-Null
+
+            [PsfDirectory] $LogFolderPath = Join-Path -Path $RootFolder -ChildPath "LogFolder"
+
+            Set-PSFConfig -Module DataSanitizer -Name 'Path.DSLogFolder' -Value $LogFolderPath -Validation string -Initialize -Description "The Log folder for DataSanitizer."
+        }
+
+        # Adding config File
+
+        $config = [PSCustomObject]@{
+            Version = 1
+            Static  = [PSCustomObject]@{
+                "DataSanitizer.path.DSrootFolder"     = $RootFolder
+                "DataSanitizer.path.DSIncidentFolder" = $IntermediateFolderPath
+            }
+        }
+
+        # Export to JSON using PSFramework
+        Write-PSFMessage -Module DataSanitizer -Level Host -String 'Initialize-DsFolder.AddingConfigFile' -StringValues $RootFolder
+        Export-PSFJson -InputObject $config -Path (Join-Path -Path $ConfigFolderPath -ChildPath "DataSanitizer.cfg.json")  -Depth 10
+
+        # Create a baseline DetectionRules.cfg.json file
+        Write-PSFMessage -Module DataSanitizer -Level Host -String 'Initialize-DsFolder.AddingDetectionRulesFile' -StringValues $ConfigFolderPath
+        New-DSDetectionConfig -Path (Join-Path -Path $ConfigFolderPath -ChildPath "DetectionRules.cfg.json") -IncludeBaseline
+    }
+}
