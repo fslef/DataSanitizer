@@ -17,9 +17,17 @@ markdownissues.txt
 node_modules
 package-lock.json
 
-# VitePress build and cache
-/docs/.vitepress/dist
-/docs/.vitepress/cache
 
 coverage.xml
 testResults.xml
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+!*.code-workspace
+
+# Built Visual Studio Code Extensions
+*.vsix
