@@ -7,6 +7,12 @@
 
     IncludeDefaultRules = $true
 
+    # Custom rule scripts (repository-local)
+    # Custom dev-only analyzer rules (hidden folder, excluded from shipping module)
+    CustomRulePath      = @(
+        '.pssa/Rules'
+    )
+
     # Prefer defaults; only exclude what you don’t want.
     ExcludeRules        = @(
         # Example: 'PSUseDeclaredVarsMoreThanAssignments'
