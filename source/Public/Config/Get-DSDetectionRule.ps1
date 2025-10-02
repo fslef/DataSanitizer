@@ -1,26 +1,26 @@
-function Get-DSDetectionRule {
-    [CmdletBinding()] 
+﻿function Get-DSDetectionRule {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
         [PsfFile] $Path,
 
         [string[]] $RuleType,
 
-        [ValidateSet('File','Log')]
+        [ValidateSet('File', 'Log')]
         [string[]] $SourceType,
 
         [switch] $IncludeInactive
     )
 
     process {
-        if (-not (Test-Path -LiteralPath $Path)) { 
+        if (-not (Test-Path -LiteralPath $Path)) {
             Write-PSFMessage -Level Error -Message "Fichier introuvable: $Path" -Tag DS, Detection
-            return 
+            return
         }
 
         try { $config = Import-PSFJson -Path $Path }
         catch {
-            Write-PSFMessage -Level Error -Message "Échec lecture JSON '$Path' : $($_.Exception.Message)" -Tag DS, Detection
+            Write-PSFMessage -Level Error -Message "Echec lecture JSON '$Path' : $($_.Exception.Message)" -Tag DS, Detection
             return
         }
 
