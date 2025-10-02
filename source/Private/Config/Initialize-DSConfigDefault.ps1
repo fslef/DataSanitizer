@@ -1,4 +1,4 @@
-function Initialize-DSConfigDefaults {
+function Initialize-DSConfigDefault {
     [CmdletBinding()]
     param()
 
