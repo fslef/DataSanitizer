@@ -44,5 +44,3 @@ function AvoidWritePSFMessageMessageParameter {
         }
     }
 }
-
-Export-ModuleMember -Function AvoidWritePSFMessageMessageParameter
