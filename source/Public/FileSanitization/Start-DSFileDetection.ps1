@@ -50,19 +50,42 @@ function Start-DSFileDetection {
             Add-ToFileInventory @file
         }
 
-        # Convert hashtable to array format for JSON export
         $script:FileInventoryArray = @()
         foreach ($filePath in $script:FileInventory.Keys) {
-            $fileObject = @{}
-            $fileObject[$filePath] = $script:FileInventory[$filePath]
-            $script:FileInventoryArray += $fileObject
+            $meta = $script:FileInventory[$filePath]
+            $script:FileInventoryArray += [pscustomobject]@{
+                Path                = $filePath
+                Name                = $meta.Name
+                ResolvedTarget      = $meta.ResolvedTarget
+                Extension           = $meta.Extension
+                Size                = $meta.Size
+                AnonymizationStatus = $meta.AnonymizationStatus
+                IsValid             = $meta.IsValid
+                Findings            = $meta.Findings
+            }
         }
 
         # TODO Change Path
         $script:FileInventoryArray | Export-PSFJson -Path "/Users/francoislefebvre/gitrepos/fslef/dataSanitizer/.automatedlab/DS-RootFolder/_Config/FileInventory.json"
 
-        Write-Output "File Inventory Hashtable Count: $($script:FileInventory.Count)"
-        Write-Output "File Inventory Array Count: $($script:FileInventoryArray.Count)"
+        $totalFiles = $script:FileInventoryArray.Count
+        $totalSize = ($script:FileInventoryArray | Measure-Object -Property Size -Sum).Sum
+        $validFiles = $script:FileInventoryArray | Where-Object { $_.IsValid }
+        $invalidFiles = $script:FileInventoryArray | Where-Object { -not $_.IsValid }
+        $validCount = $validFiles.Count
+        $invalidCount = $invalidFiles.Count
+        $validSize = ($validFiles | Measure-Object -Property Size -Sum).Sum
+        $invalidSize = ($invalidFiles | Measure-Object -Property Size -Sum).Sum
+
+        Write-PSFMessage -Module DataSanitizer -Level Significant -String 'Start-DSFileDetection.InventorySummary' -StringValues $totalFiles, (Format-DSSize -Bytes $totalSize)
+        Write-PSFMessage -Module DataSanitizer -Level Significant -String 'Start-DSFileDetection.InventoryValidity' -StringValues $validCount, (Format-DSSize -Bytes $validSize), $invalidCount, (Format-DSSize -Bytes $invalidSize)
+
+        Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Start-DSFileDetection.InventoryByExtHeader'
+        $grouped = $validFiles | Group-Object -Property Extension | Sort-Object Count -Descending
+        foreach ($g in $grouped) {
+            $extSize = ($g.Group | Measure-Object -Property Size -Sum).Sum
+            Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Start-DSFileDetection.InventoryByExtItem' -StringValues $g.Name, $g.Count, (Format-DSSize -Bytes $extSize)
+        }
 
     }
 }
