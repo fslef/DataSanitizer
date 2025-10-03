@@ -14,32 +14,36 @@ function New-DSDetectionConfig {
         if ($IncludeBaseline) {
             Write-PSFMessage -Level Verbose -Message "Adding baseline detection rules (Regex type)." -Tag DS, Detection
             $rules += [PSCustomObject]@{
-                Name       = 'IPv4Address'
-                Type       = 'Regex'
-                Definition = '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
-                IsActive   = $true
-                AppliesTo  = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                Name            = 'IPv4Address'
+                Type            = 'Regex'
+                Definition      = '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
+                IsActive        = $true
+                AppliesTo       = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                RemediationType = 'MappingFile'
             }
             $rules += [PSCustomObject]@{
-                Name       = 'IPv6Address'
-                Type       = 'Regex'
-                Definition = '^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$'
-                IsActive   = $true
-                AppliesTo  = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                Name            = 'IPv6Address'
+                Type            = 'Regex'
+                Definition      = '^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$'
+                IsActive        = $true
+                AppliesTo       = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                RemediationType = 'MappingFile'
             }
             $rules += [PSCustomObject]@{
-                Name       = 'DistinguishedName'
-                Type       = 'Regex'
-                Definition = '^([a-zA-Z0-9\-]+=[^,]+,?)+$'
-                IsActive   = $true
-                AppliesTo  = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                Name            = 'DistinguishedName'
+                Type            = 'Regex'
+                Definition      = '^([a-zA-Z0-9\-]+=[^,]+,?)+$'
+                IsActive        = $true
+                AppliesTo       = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                RemediationType = 'MappingFile'
             }
             $rules += [PSCustomObject]@{
-                Name       = 'GUID'
-                Type       = 'Regex'
-                Definition = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
-                IsActive   = $true
-                AppliesTo  = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                Name            = 'GUID'
+                Type            = 'Regex'
+                Definition      = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+                IsActive        = $true
+                AppliesTo       = @([PSCustomObject]@{ SourceType = 'File'; SourceFilter = '.*' })
+                RemediationType = 'MappingFile'
             }
         }
 
