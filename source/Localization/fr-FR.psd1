@@ -21,6 +21,7 @@
     "Start-DSFileDetection.StartingFolder"         = "Démarrage de la détection de fichiers dans le dossier : {0}"
     "Start-DSFileDetection.StartingFile"           = "Démarrage de la détection de fichiers pour le fichier : {0}"
     "Start-DSFileDetection.ProcessingFile"         = "Traitement du fichier : {0}"
+    "Start-DSFileDetection.ZipFilesFound"          = "Trouvé {0} fichier(s) ZIP à extraire"
     "Start-DSFileDetection.UnarchivingZip"         = "Décompression du fichier ZIP : {0} vers {1}"
     "Start-DSFileDetection.ZipUnarchived"          = "Fichier ZIP extrait vers : {0}"
     "Start-DSFileDetection.InventorySummary"       = "Résumé inventaire : {0} fichiers pour un total de {1}"
@@ -28,5 +29,6 @@
     "Start-DSFileDetection.InventoryByExtHeader"   = "Fichiers valides par extension (compte / taille) :"
     "Start-DSFileDetection.InventoryByExtItem"     = "{0} : {1} fichiers ({2})"
     "Start-DSFileDetection.Start"                  = "Démarrage de la détection de fichiers DataSanitizer. Chemin d'entrée : {0}"
+    "Start-DSFileDetection.StartInventory"         = "Démarrage de l'inventaire des fichiers pour le chemin : {0}"
     "Start-DSFileDetection.InventoryStats"         = "Inventaire des fichiers terminé. Entrées Hashtable : {0}; Entrées du tableau indexé : {1}"
 }
