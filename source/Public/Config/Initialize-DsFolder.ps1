@@ -25,15 +25,12 @@ function Initialize-DsFolder {
         # Adding _Config Folder under root
         Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingConfigFolder' -StringValues $RootFolder
         New-Item -Path $RootFolder -Name "_Config" -ItemType Directory | Out-Null
-
         [PsfDirectory] $ConfigFolderPath = Join-Path -Path $RootFolder -ChildPath "_Config"
 
         # Add _Intermediate Folder
         if ($IntermediateFolderName) {
             Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingIntermediateFolder' -StringValues $IntermediateFolderName, $RootFolder
-
             New-Item -Path $RootFolder -Name $IntermediateFolderName -ItemType Directory | Out-Null
-
             [PsfDirectory] $IntermediateFolderPath = Join-Path -Path $RootFolder -ChildPath $IntermediateFolderName
 
         }
@@ -41,30 +38,30 @@ function Initialize-DsFolder {
         # Adding First Log Folderimport
         if ($IntermediateFolderName) {
             Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingLogFolder' -StringValues $IntermediateFolderPath
-
             New-Item -Path $IntermediateFolderPath -Name "LogFolder" -ItemType Directory | Out-Null
-
             [PsfDirectory] $LogFolderPath = Join-Path -Path $IntermediateFolderPath -ChildPath "LogFolder"
 
-            Set-PSFConfig -Module DataSanitizer -Name 'Path.DSLogFolder' -Value $LogFolderPath # -Validation string -Initialize -Description "The Log folder for DataSanitizer."
         }
         else {
             Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingLogFolder' -StringValues $RootFolder
-
             New-Item -Path $RootFolder -Name "LogFolder" -ItemType Directory | Out-Null
-
             [PsfDirectory] $LogFolderPath = Join-Path -Path $RootFolder -ChildPath "LogFolder"
 
-            Set-PSFConfig -Module DataSanitizer -Name 'Path.DSLogFolder' -Value $LogFolderPath # -Validation string -Initialize -Description "The Log folder for DataSanitizer."
         }
+        # Adding Input Folder under LogFolder
+        Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Initialize-DsFolder.AddingLogInputFolder' -StringValues $LogFolderPath
+        New-Item -Path $LogFolderPath -Name "Input" -ItemType Directory | Out-Null
+        [PsfDirectory] $LogInputFolderPath = Join-Path -Path $LogFolderPath -ChildPath "Input"
+
+        Set-PSFConfig -Module DataSanitizer -Name 'Path.DSLogInputFolder' -Value $LogInputFolderPath
 
         # Adding Json config File
 
         $config = [PSCustomObject]@{
             Version = 1
             Static  = [PSCustomObject]@{
-                "DataSanitizer.path.DSrootFolder" = $RootFolder
-                "DataSanitizer.path.DSLogFolder"  = $LogFolderPath
+                "DataSanitizer.path.DSrootFolder"     = $RootFolder
+                "DataSanitizer.path.DSLogInputFolder" = $LogInputFolderPath
             }
         }
 
