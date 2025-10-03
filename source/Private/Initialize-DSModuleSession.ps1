@@ -15,6 +15,7 @@ function Initialize-DSModuleSession {
         Set-PSFConfig -Module DataSanitizer -Name Path.DSrootFolder -Value '<tbd>' -Validation string -Initialize -Description "The root folder for DataSanitizer." -ModuleExport
         Set-PSFConfig -Module DataSanitizer -Name Path.DSConfigFile -Value '<tbd>' -Validation string -Initialize -Description "The config file for DataSanitizer." -ModuleExport
         Set-PSFConfig -Module DataSanitizer -Name Path.DSLogInputFolder -Value '<tbd>' -Validation string -Initialize -Description "The Log Input folder where log files are stored." -ModuleExport
+        Set-PSFConfig -Module DataSanitizer -Name Path.DSLogWorkingFolder -Value '<tbd>' -Validation string -Initialize -Description "The Log Working folder from where files are processed." -ModuleExport
 
         Set-DSDefaultConfig
 
