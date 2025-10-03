@@ -24,38 +24,34 @@ function Add-ToFileInventory {
         }
 
         if ([string]::IsNullOrWhiteSpace($Extension)) {
-            Write-PSFMessage -Module DataSanitizer -Level Warning -Message "File '$ResolvedTarget' has no extension. Skipping addition." -Tag File, Inventory
+            Write-PSFMessage -Module DataSanitizer -Level Verbose -Message "File '$ResolvedTarget' has no extension. Skipping addition." -Tag File, Inventory
             return
         }
 
-        # List of extensions to skip from inventory (case-insensitive, always with leading dot)
-        $script:invalidExtensions = @(".PNG", ".WER", ".HIV", ".ETL", ".XSL", ".IPSEC", ".WFW", ".NFO")
+        # List of valid extensions (case-insensitive, always with leading dot)
+        # If extension is not in this list, it will be considered invalid
+        $script:validExtensions = @(".TXT", ".LOG", ".CSV", ".JSON", ".XML", ".HTML", ".HTM", ".MD", ".RTF")
 
         $normalizedExtension = "$Extension".ToUpperInvariant()
-        $isInvalidExtension = $script:invalidExtensions -and $script:invalidExtensions -contains $normalizedExtension
+        $isValidExtension = $script:validExtensions -and $script:validExtensions -contains $normalizedExtension
 
+        # Avoid duplicating an entry: if the path is already in the inventory, skip adding it again
+        if ($script:FileInventory.ContainsKey($ResolvedTarget)) {
+            # Write-PSFMessage -Module DataSanitizer -Level Warning -Message "File '$ResolvedTarget' is already in the inventory. Skipping addition." -Tag File, Inventory
+            return
+        }
+
+        # Create a new entry.  Include a Findings property initialized to an empty array so
+        # downstream processing can append results directly.  The IsValid flag is determined
+        # by the extension filter above (true if extension is in the valid list).
         $script:FileInventory[$ResolvedTarget] = [PSCustomObject]@{
             Name                = $Name
             ResolvedTarget      = $ResolvedTarget
             Extension           = $Extension
             Size                = $Size
             AnonymizationStatus = 'NotStarted'
-            IsValid             = -not $isInvalidExtension
-        }
-
-        if ($script:FileInventory[$ResolvedTarget]) {
-            # Write-PSFMessage -Module DataSanitizer -Level Warning -Message "File '$ResolvedTarget' is already in the inventory. Skipping addition." -Tag File, Inventory
-            return
-        }
-
-        $script:FileInventory[$ResolvedTarget] = [PSCustomObject]@{
-            Name                = $Name
-            ResolvedTarget      = $ResolvedTarget
-            Extension           = $Extension
-            Size                = $Size
-            # Additional custom properties I need
-            AnonymizationStatus = 'NotStarted'  # Example custom property
-            IsValid             = $true          # Example custom property
+            IsValid             = $isValidExtension
+            Findings            = @()
         }
     }
 }
