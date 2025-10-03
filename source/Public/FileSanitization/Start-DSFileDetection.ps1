@@ -2,16 +2,15 @@ function Start-DSFileDetection {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]
-        [PsfDirectory]$InputPath = (Get-PSFConfig -Module DataSanitizer -Name 'Path.DSLogInputFolder')
+        [PsfDirectorySingle]$InputPath = (Get-PSFConfig -Module DataSanitizer -Name 'Path.DSLogInputFolder')
     )
 
     process {
 
-        Write-PSFMessage -Module DataSanitizer -Level Important -String 'Start-DSFileDetection.Start' -StringValues $InputPath
-
-        Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Start-DSFileDetection.StartingFile' -StringValues $InputPath
-
         Show-Disclaimer
+
+        Write-PSFMessage -Module DataSanitizer -Level Important -String 'Start-DSFileDetection.Start' -StringValues $InputPath
+        Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Start-DSFileDetection.StartingFile' -StringValues $InputPath
 
         #region ZIP Processing
         # Check for ZIP files in the folder (and subfolders) and extract them
