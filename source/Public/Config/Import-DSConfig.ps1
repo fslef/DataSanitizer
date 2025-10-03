@@ -33,6 +33,10 @@ function Import-DsConfig {
         if ($ConfigFile) {
             Write-PSFMessage -Module DataSanitizer -Level Verbose -String 'Import-DSConfig.ConfigFilePath' -StringValues $ConfigFile
             try {
+                $importedConfig = Get-Content -Path $ConfigFile | ConvertFrom-Json
+                if (-not ($importedConfig.PSObject.Properties.Name -contains 'Version' -and $importedConfig.PSObject.Properties.Name -contains 'Static')) {
+                    throw "ERROR: DataSanitizer.cfg.json format is invalid. Must contain 'Version' and 'Static' keys."
+                }
                 Import-PSFConfig -Path $ConfigFile -Schema MetaJson
                 # Update module parameter only if import succeeds
                 Set-PSFConfig -Module DataSanitizer -Name Path.DSConfigFile -Value $ConfigFile
