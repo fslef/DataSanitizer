@@ -1,48 +1,81 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "separateMajorMinor": false,
   "separateMinorPatch": true,
   "ignoreTests": true,
   "prConcurrentLimit": 5,
   "branchConcurrentLimit": 10,
-  "labels": ["dependencies"],
-  "assignees": ["fslef"],
+  "labels": [
+    "dependencies"
+  ],
+  "assignees": [
+    "fslef"
+  ],
   "packageRules": [
     {
       "description": "Group all npm dependencies together",
-      "matchManagers": ["npm"],
+      "matchManagers": [
+        "npm"
+      ],
       "groupName": "npm dependencies",
-      "matchUpdateTypes": ["major", "minor"]
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ]
     },
     {
       "description": "PowerShell modules in RequiredModules.psd1",
-      "matchManagers": ["regex"],
-      "matchFileNames": ["RequiredModules.psd1"],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        "RequiredModules.psd1"
+      ],
       "groupName": "PowerShell modules",
-      "matchUpdateTypes": ["major", "minor"]
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ]
     },
     {
       "description": "PowerShell modules in Resolve-Dependency.psd1",
-      "matchManagers": ["regex"],
-      "matchFileNames": ["Resolve-Dependency.psd1"],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        "Resolve-Dependency.psd1"
+      ],
       "groupName": "PowerShell dependency modules",
-      "matchUpdateTypes": ["major", "minor"]
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ]
     },
     {
       "description": "DevContainer Node.js version",
-      "matchManagers": ["regex"],
-      "matchFileNames": [".devcontainer/devcontainer.json"],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        ".devcontainer/devcontainer.json"
+      ],
       "groupName": "devcontainer dependencies",
-      "matchUpdateTypes": ["major", "minor"]
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ]
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "description": "Update PowerShell module versions in RequiredModules.psd1",
-      "fileMatch": ["^RequiredModules\\.psd1$"],
+      "managerFilePatterns": [
+        "/^RequiredModules\\.psd1$/"
+      ],
       "matchStrings": [
         "\\s+(?<depName>[\\w\\.]+)\\s+=\\s+'(?<currentValue>[^']+)'"
       ],
@@ -50,8 +83,11 @@
       "registryUrlTemplate": "https://www.powershellgallery.com/api/v2"
     },
     {
+      "customType": "regex",
       "description": "Update PowerShell module versions in Resolve-Dependency.psd1",
-      "fileMatch": ["^Resolve-Dependency\\.psd1$"],
+      "managerFilePatterns": [
+        "/^Resolve-Dependency\\.psd1$/"
+      ],
       "matchStrings": [
         "(?<depName>PSResourceGetVersion|UsePowerShellGetCompatibilityModuleVersion)\\s+=\\s+'(?<currentValue>[^']+)'"
       ],
@@ -59,8 +95,11 @@
       "registryUrlTemplate": "https://www.powershellgallery.com/api/v2"
     },
     {
+      "customType": "regex",
       "description": "Update Node.js version in devcontainer.json",
-      "fileMatch": ["^\\.devcontainer/devcontainer\\.json$"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer/devcontainer\\.json$/"
+      ],
       "matchStrings": [
         "\"image\":\\s*\"node:(?<currentValue>[^\"]+)\""
       ],
@@ -71,8 +110,15 @@
   "npm": {
     "packageRules": [
       {
-        "matchUpdateTypes": ["major", "minor"],
-        "matchPackageNames": ["vitepress", "vitepress-plugin-mermaid", "mermaid"]
+        "matchUpdateTypes": [
+          "major",
+          "minor"
+        ],
+        "matchPackageNames": [
+          "vitepress",
+          "vitepress-plugin-mermaid",
+          "mermaid"
+        ]
       }
     ]
   }
