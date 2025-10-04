@@ -3,7 +3,7 @@
 {
     "name": "DataSanitizer Dev",
     // Use the official Node.js image (match your pipeline version if you like)
-    "image": "node:18",
+    "image": "node:22",
     // Recommend VS Code extensions for Vue/VitePress development
     "customizations": {
         "vscode": {
